@@ -11,9 +11,11 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import { injectStore } from './services/axiosInterceptor';
 import store from './features/store';
+
 // ---------------------------------------------------------------------------------
 injectStore(store);
 let persistor = persistStore(store);
+
 // ------------------------------------------------------------------------------------------
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

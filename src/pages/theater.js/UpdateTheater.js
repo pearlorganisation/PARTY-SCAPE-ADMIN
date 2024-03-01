@@ -1,66 +1,68 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const UpdateTheater = () => {
+  const [formData, setFormData] = useState(initialValues);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(formData);
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md">
-        <img
-          src="your-image-url.jpg" // Replace with the URL of your image
-          alt="Form Image"
-          className="mb-4 rounded-md"
+    <form className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
+      <h2 className="text-2xl font-semibold mb-4">Edit Form</h2>
+      <div className="mb-4">
+        <label
+          className="block text-gray-700 text-sm font-bold mb-2"
+          htmlFor="name"
+        >
+          Name
+        </label>
+        <input
+          className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="name"
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
         />
-        <form>
-          <div className="mb-4">
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className="mt-1 p-2 w-full border rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="message"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows="4"
-              className="mt-1 p-2 w-full border rounded-md"
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-          >
-            Submit
-          </button>
-        </form>
       </div>
-    </div>
+      <div className="mb-4">
+        <label
+          className="block text-gray-700 text-sm font-bold mb-2"
+          htmlFor="email"
+        >
+          Email
+        </label>
+        <input
+          className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="email"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+      </div>
+      {/* Add more fields as needed */}
+      <div className="flex items-center justify-end">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+          onClick={handleSubmit}
+        >
+          Save Changes
+        </button>
+        let data
+      </div>
+    </form>
   );
 };
 
