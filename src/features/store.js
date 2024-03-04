@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import authReducer from './slices/authenticationSlice';
 import theater from './slices/theater';
+import cake from './slices/cake'
 // import
 
 // ---------------------------------------------------------
@@ -28,6 +29,7 @@ const persistConfig = {
 const reducer = combineReducers({
   auth: authReducer,
   theater,
+  cake,
 
   // omitedPart: OmitReducer // not persisting this reducer
 });
