@@ -6,24 +6,24 @@ import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'; // Import icons from Re
 
 const ViewUsers = () => {
   const navigate = useNavigate();
-  const tableItems = [
-    {
-      name: 'Liam James',
-      email: 'liamjames@example.com',
-      position: 'Software engineer',
-      salary: '$100K',
-    },
-    {
-      name: 'Olivia Emma',
-      email: 'oliviaemma@example.com',
-      position: 'Product designer',
-      salary: '$90K',
-    },
-    {
-      name: 'William Benjamin',
-      email: 'william.benjamin@example.com',
-      position: 'Front-end developer',
-      salary: '$80K',
+    const tableItems = [
+      {
+        name: 'Liam James',
+        email: 'liamjames@example.com',
+        position: 'Software engineer',
+        salary: '$100K',
+      },
+      {
+        name: 'Olivia Emma',
+        email: 'oliviaemma@example.com',
+        position: 'Product designer',
+        salary: '$90K',
+      },
+      {
+        name: 'William Benjamin',
+        email: 'william.benjamin@example.com',
+        position: 'Front-end developer',
+        salary: '$80K',
     },
     {
       name: 'Henry Theodore',

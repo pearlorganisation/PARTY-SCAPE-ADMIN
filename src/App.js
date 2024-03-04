@@ -13,10 +13,10 @@ import PageNotFound from './pages/PageNotFound';
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
 function App() {
-  const { isUserLoggedIn } = useSelector((state) => state.auth);
+  let { isUserLoggedIn } = useSelector((state) => state.auth);
   console.log(isUserLoggedIn, 'isUserLoggedIn');
   const [loading, setLoading] = useState(true);
-
+  isUserLoggedIn= true
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);

@@ -1,5 +1,14 @@
 import { lazy } from 'react';
 import ViewTheater from '../pages/theater.js/viewTheater';
+import {ViewCake} from '../pages/Cake/ViewCake';
+import UpdateCake from '../pages/Cake/UpdateCake';
+import { CreateCake } from '../pages/Cake/CreateCake';
+import UpdateCeremony from '../pages/Ceremony/UpdateCeremony';
+import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
+import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
+
+
+
 
 // const Calendar = lazy(() => import('../pages/Calendar'));
 // const Chart = lazy(() => import('../pages/Chart'));
@@ -116,6 +125,38 @@ const coreRoutes = [
     path: '/theaters',
     title: 'view theater',
     component: ViewTheater,
+  },
+  //Cake routes
+  {
+    path: '/cakes',
+    title: 'view cake',
+    component: ViewCake,
+  },
+  {
+    path: '/updateCake/:id',
+    title: 'edit cake',
+    component: UpdateCake,
+  },
+  {
+    path: '/createCake',
+    title: 'create cake',
+    component: CreateCake,
+  },
+  //Ceremony routes
+  {
+    path: '/ceremony',
+    title: 'view ceremony',
+    component: ViewCeremony,
+  },
+  {
+    path: '/updateCeremony/:id',
+    title: 'edit ceremony',
+    component: UpdateCeremony,
+  },
+  {
+    path: '/createCeremony',
+    title: 'create ceremony',
+    component: CreateCeremony,
   },
   // Roles Routes
   {
