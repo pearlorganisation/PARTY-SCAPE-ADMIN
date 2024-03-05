@@ -6,6 +6,8 @@ import { CreateCake } from '../pages/Cake/CreateCake';
 import UpdateCeremony from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
 import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
+import CreateTheater from '../pages/theater.js/CreateTheater';
+import UpdateTheater from '../pages/theater.js/UpdateTheater';
 
 
 
@@ -105,11 +107,6 @@ const coreRoutes = [
     component: CreateUser,
   },
   {
-    path: '/editTheater',
-    title: 'Edit Theater',
-    component: UpdateUser,
-  },
-  {
     path: '/users/viewUsers',
     title: 'View Users',
     component: ViewUsers,
@@ -125,6 +122,16 @@ const coreRoutes = [
     path: '/theaters',
     title: 'view theater',
     component: ViewTheater,
+  },
+  {
+    path: '/updateTheater/:id',
+    title: 'edit theater',
+    component: UpdateTheater,
+  },
+  {
+    path: '/createTheater',
+    title: 'create theater',
+    component: CreateTheater,
   },
   //Cake routes
   {

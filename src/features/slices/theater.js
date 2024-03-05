@@ -23,7 +23,9 @@ const theaterSlice = createSlice({
       .addCase(getAllTheaters.fulfilled, (state, action) => {
         state.isLoading = false;
         state.errorMessage = '';
+        console.log("API Response Payload:", action.payload);
         state.theaterData = action.payload.data;
+        console.log("Reducer - Updated theaterData:", state.theaterData);
       })
       .addCase(getAllTheaters.rejected, (state, action) => {
         state.isLoading = false;

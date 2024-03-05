@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm ,useFieldArray} from "react-hook-form";
 
-const UpdateTheater = () => {
+const CreateTheater = () => {
 
     const {register,handleSubmit,reset,control,}=useForm({
         defaultValues:{
@@ -75,7 +75,7 @@ const UpdateTheater = () => {
         <div className="bg-gray-800">
       <div className=" flex justify-center">
         <h3 className="text-gray-600 text-2xl font-semibold sm:text-3xl">
-          Update theater details
+          Create ceremony details
         </h3>
       </div>
       <div className="bg-white rounded-lg shadow p-4 py-6  sm:rounded-lg sm:max-w-5xl mt-8 mx-auto">
@@ -225,4 +225,4 @@ const UpdateTheater = () => {
   )
 }
 
-export default UpdateTheater
+export default CreateTheater

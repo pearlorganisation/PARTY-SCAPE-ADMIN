@@ -1,22 +1,32 @@
 // AdminPanel.js
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Delete from '../../components/Delete';
-import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router';
-import { useState } from 'react';
-
 import { FaEdit, FaTrash, FaEye } from 'react-icons/fa'; // Import icons from React Icons library
 import { deleteTheater, getAllTheaters } from '../../features/actions/theater';
+import axios from 'axios';
+
 
 const ViewTheater = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllTheaters());
-  }, []);
+    const fetchData = async()=>{
+      try{
+        const response= await axios.get("https://party-scape-backend.onrender.com/api/v1/theater");
+        console.log("API Response:", response.data); // Log the API response
+        dispatch({ type: "SET_THEATERS", payload: response.data });
+      }
+      catch(error){
+       console.error("Error fetching theaters:",error)
+      }
+    }
+    fetchData();
+  }, [dispatch]);
+ 
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState();
@@ -29,8 +39,13 @@ const ViewTheater = () => {
   const handleModal = (ID) => {
     setShowDeleteModal(true);
     setId(ID);
+  }; 
+  const handleAddTheater = () => {
+    navigate('/createTheater');
   };
-  const { theaterData, isLoading } = useSelector((state) => state.theater);
+  const { theaterData = [], isLoading } = useSelector((state) => state.theater);
+  console.log("Redux State:", useSelector((state) => state));
+  console.log("theaterData:", theaterData);
   return (
     <>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
@@ -46,7 +61,7 @@ const ViewTheater = () => {
           </div>
           <div className="mt-3 md:mt-0">
             <a
-              href="javascript:void(0)"
+              onClick={handleAddTheater}
               className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
             >
               Add member
@@ -100,6 +115,7 @@ const ViewTheater = () => {
                     </td>
                   </tr>
                 ))
+              
               )}
             </tbody>
           </table>

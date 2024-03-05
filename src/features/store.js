@@ -6,7 +6,7 @@ import { encryptTransform } from 'redux-persist-transform-encrypt';
 import authReducer from './slices/authenticationSlice';
 import theater from './slices/theater';
 import cake from './slices/cake'
-// import
+
 
 // ---------------------------------------------------------
 
