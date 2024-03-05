@@ -14,7 +14,7 @@ export const getAllCakes = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data, 'datatattatatatat');
+
       return data;
     } catch (e) {
       return rejectWithValue(e);
@@ -23,7 +23,7 @@ export const getAllCakes = createAsyncThunk(
 );
 
 //delete cake api
-export const deleteCake= createAsyncThunk(
+export const deleteCake = createAsyncThunk(
   'deleteCake',
   async (payload, { rejectWithValue }) => {
     try {

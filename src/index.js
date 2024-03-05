@@ -13,7 +13,7 @@ import { injectStore } from './services/axiosInterceptor';
 import store from './features/store';
 
 // ---------------------------------------------------------------------------------
-injectStore(store);
+// injectStore(store);
 let persistor = persistStore(store);
 
 // ------------------------------------------------------------------------------------------

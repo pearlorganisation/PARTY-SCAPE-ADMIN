@@ -5,7 +5,8 @@ import { combineReducers } from 'redux';
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 import authReducer from './slices/authenticationSlice';
 import theater from './slices/theater';
-import cake from './slices/cake'
+import ceremonyType from './slices/ceremonyType';
+import cake from './slices/cake';
 // import
 
 // ---------------------------------------------------------
@@ -30,6 +31,7 @@ const reducer = combineReducers({
   auth: authReducer,
   theater,
   cake,
+  ceremonyType,
 
   // omitedPart: OmitReducer // not persisting this reducer
 });
