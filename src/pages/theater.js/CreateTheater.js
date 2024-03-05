@@ -18,7 +18,9 @@ const CreateTheater = () => {
       const onSubmit = data =>{
         console.log('data',data)
         reset({
-         
+          name: "",
+      price: "",
+      
         });
       }
 

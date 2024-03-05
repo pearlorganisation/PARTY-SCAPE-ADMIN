@@ -18,7 +18,7 @@ const ViewTheater = () => {
       try{
         const response= await axios.get("https://party-scape-backend.onrender.com/api/v1/theater");
         console.log("API Response:", response.data); // Log the API response
-        dispatch({ type: "SET_THEATERS", payload: response.data });
+        dispatch(getAllTheaters);
       }
       catch(error){
        console.error("Error fetching theaters:",error)
