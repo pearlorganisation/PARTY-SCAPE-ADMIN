@@ -31,6 +31,7 @@ const ViewTheater = () => {
     setId(ID);
   };
   const { theaterData, isLoading } = useSelector((state) => state.theater);
+  console.log(theaterData, 'theaterData');
   return (
     <>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
@@ -68,7 +69,7 @@ const ViewTheater = () => {
               {isLoading ? (
                 <p>Loading hra h bhai</p>
               ) : (
-                theaterData.map((item, idx) => (
+                theaterData?.map((item, idx) => (
                   <tr key={idx}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
