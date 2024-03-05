@@ -39,3 +39,19 @@ export const deleteTheater = createAsyncThunk(
     }
   }
 );
+
+export const updateTheater = createAsyncThunk(
+  'updateTheater',
+  async ({ payload, id }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/v1/theater/${id}`,
+        payload,
+        { withCredentials: true }
+      );
+      return response;
+    } catch (e) {
+      return rejectWithValue;
+    }
+  }
+);

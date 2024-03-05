@@ -8,6 +8,7 @@ import PaymentOutlinedIcon from '@mui/icons-material/PaymentOutlined';
 import CardMembershipOutlinedIcon from '@mui/icons-material/CardMembershipOutlined';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
+import CelebrationOutlinedIcon from '@mui/icons-material/CelebrationOutlined';
 // -------------------------------------------------------------------------------
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
@@ -205,7 +206,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   }`}
                 >
                 
-
+                  <CelebrationOutlinedIcon  />
                   Manage Ceremonies
                 </NavLink>
               </li>
@@ -229,7 +230,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                  AdminPanelSettingsOutlinedIcon
+                  <AdminPanelSettingsOutlinedIcon/>
                   Manage Permissions
                 </NavLink>
               </li>
