@@ -1,11 +1,12 @@
 import { lazy } from 'react';
-import ViewTheater from '../pages/theater.js/viewTheater';
+import ViewTheater from '../pages/theater/viewTheater';
 import {ViewCake} from '../pages/Cake/ViewCake';
 import UpdateCake from '../pages/Cake/UpdateCake';
 import { CreateCake } from '../pages/Cake/CreateCake';
 import UpdateCeremony from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
 import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
+import addTheater from '../pages/theater/addTheater';
 
 
 
@@ -126,6 +127,14 @@ const coreRoutes = [
     title: 'view theater',
     component: ViewTheater,
   },
+
+  {
+    path: '/addTheater',
+    title: 'Add theater',
+    component: addTheater,
+  },
+
+
   //Cake routes
   {
     path: '/cakes',

@@ -15,77 +15,77 @@ export const tableItems = [
     photo:
       'https://images.unsplash.com/photo-1511485977113-f34c92461ad9?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '2',
     name: 'Jack',
     photo: 'https://randomuser.me/api/portraits/men/86.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '3',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '4',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '5',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '6',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '7',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '8',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '9',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '10',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
   {
     id: '11',
     name: 'Jackson',
     photo: 'https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg',
     price: '1000',
-    isEggless: 'true',
+    isEggless: true,
   },
 ];
 export const ViewCake = () => {
@@ -120,73 +120,105 @@ export const ViewCake = () => {
 
   return (
     <>
-      <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+      <div className="max-w-screen-xl mx-auto px-4 md:px-8 flex flex-col gap-4">
         <div className="items-start justify-between md:flex">
           <div className="max-w-lg">
             <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
-              Manage cakes
+              Manage Cakes
             </h3>
-            <p className="text-gray-600 mt-2">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
-            </p>
           </div>
           <div className="mt-3 md:mt-0">
             <a
               onClick={handleAddCake}
-              className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+              className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm cursor-pointer"
             >
               Add Cake
             </a>
           </div>
         </div>
-        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-          <table className="w-full table-auto text-sm text-left">
-            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table className="w-full text-sm text-gray-500 dark:text-white text-center">
+            <thead className="text-xs text-white uppercase bg-black dark:bg-gray-500 dark:text-red">
               <tr>
-                <th className="py-3 px-6">ID</th>
-                <th className="py-3 px-6">Cake Name</th>
-                <th className="py-3 px-6">Logo</th>
-                <th className="py-3 px-6">Price</th>
-                <th className="py-3 px-6">Eggless</th>
-                <th className="py-3 px-6">Actions</th>
+                <th scope="col" className="">
+                  S.No
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Image
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Eggless
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Price
+                </th>
+                <th scope="col" colSpan={2} className="py-3">
+                  Action
+                </th>
               </tr>
             </thead>
-            <tbody className="text-gray-600 divide-y">
-              {Array.isArray(cakeData) &&
-                cakeData.map((item, idx) => (
-                  <tr key={idx}>
-                    <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{item.name}</td>
-                    <td className="px-5 py-3">
+            <tbody>
+             
+
+              {isLoading ? (
+                <p className='text-lg font-bold '>Loading</p>
+              ) : (
+                Array.isArray(cakeData) && cakeData?.map((item, idx) => (
+                  <tr
+                    className="odd:bg-white even:bg-[#E6E6E6] border-b dark:odd:bg-[#2f333b] dark:even:bg-[#272c38] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    key={idx}
+                  >
+                    <td className="px-6 py-4 font-semibold text-[#000] dark:text-white">
+                      {idx + 1}
+                    </td>
+                    <td className="p-4 flex justify-center">
                       <img
                         src={item?.image}
-                        className="w-10 h-10 rounded-full"
+                        className="w-24 md:w-32 max-w-full max-h-full"
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item.price}
+                    <td className="px-6 py-4 font-semibold text-[#000] dark:text-white">
+                      {item?.name}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item.isEggless ? 'True' : 'False'}
+                    <td className="px-2 py-4 text-[#000] font-semibold dark:text-white">
+                      {item?.isEggless ? 'Yes' : "No"}
                     </td>
-                    <td className="flex px-5 py-3 space-x-5 items-center">
-                      <a
-                        href={`/updateCake/${item.id}`}
-                        className="py-2 text-green-600 font-medium"
+                    <td className="px-2 py-4 text-[#000] font-semibold dark:text-white">
+                      {item?.price}/-
+                    </td>
+                    <td className="py-4">
+                      <button
+                        className="font-medium px-4 py-1 w-full rounded bg-blue-600 hover:bg-blue-800 text-white dark:text-white"
+                        onClick={() => {
+                          navigate(`/updateCake/${item?.id}`, { state: item });
+                        }}
                       >
                         Edit
-                      </a>
-                      <a href="#" className="py-2 text-red-500 font-medium">
+                      </button>
+                    </td>
+                    <td className="py-4">
+                      <button
+                        href="#"
+                        className="font-medium px-3 py-1 w-full rounded bg-red-600 hover:bg-red-800 text-white dark:text-white cursor-pointer"
+                        onClick={() => {
+                          handleModal(item?._id);
+                        }}
+                      >
                         Delete
-                      </a>
+                      </button>
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
           </table>
         </div>
       </div>
+
+
       {showDeleteModal && (
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />
       )}

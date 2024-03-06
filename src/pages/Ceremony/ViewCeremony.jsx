@@ -89,6 +89,7 @@ export const tableItems = [
     otherDetails: [{ name: 'john' }, { name: 'cena' }],
   },
 ];
+
 export const ViewCeremony = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -121,67 +122,103 @@ export const ViewCeremony = () => {
 
   return (
     <>
-      <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+      <div className="max-w-screen-xl mx-auto px-4 md:px-8 flex flex-col gap-4">
         <div className="items-start justify-between md:flex">
           <div className="max-w-lg">
             <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
               Manage ceremony
             </h3>
-            <p className="text-gray-600 mt-2">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
-            </p>
           </div>
           <div className="mt-3 md:mt-0">
             <a
               onClick={handleAddCake}
-              className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+              className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-700 active:bg-indigo-700 md:text-sm cursor-pointer"
             >
               Add Ceremony
             </a>
           </div>
         </div>
         <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-          <table className="w-full table-auto text-sm text-left">
-            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
+
+
+          <table className="w-full text-sm text-gray-500 dark:text-white text-center">
+            <thead className="text-xs text-white uppercase bg-black dark:bg-gray-500 dark:text-red">
               <tr>
-                <th className="py-3 px-6">Type</th>
-                <th className="py-3 px-6">Logo</th>
-                <th className="py-3 px-6">Price</th>
-                <th className="py-3 px-6">Other details</th>
-                <th className="py-3 px-6">Actions</th>
+                <th scope="col" >
+                  S.No
+                </th>
+                <th scope="col" className="px-16 py-3">
+                  Image
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Type
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Price
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Oth Det.
+                </th>
+                <th scope="col" colSpan={2} className="py-3">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody className="text-gray-600 divide-y">
-              {Array.isArray(dataList) &&
-                dataList.map((item, idx) => (
-                  <tr key={idx}>
-                    <td className="px-6 py-4 whitespace-nowrap">{item.type}</td>
-                    <td className="px-5 py-3">
-                      <img src={item.logo} className="w-10 h-10 rounded-full" />
+            <tbody>
+              {isLoading ? (
+                <p className="text-lg font-bold ">Loading</p>
+              ) : (
+                Array.isArray(dataList) && dataList?.map((item, idx) => (
+                  <tr
+                    className="odd:bg-white even:bg-[#E6E6E6] border-b dark:odd:bg-[#2f333b] dark:even:bg-[#272c38] dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    key={idx}
+                  >
+                    <td className="px-6 py-4 font-semibold text-[#000] dark:text-white">
+                      {idx + 1}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item.price}
+                    <td className="p-4 flex justify-center">
+                      <img
+                        src={item?.logo}
+                        className="w-24 md:w-32 max-w-full max-h-full"
+                      />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {' '}
-                      {item.otherDetails.map((detail, index) => (
-                        <div key={index}>{detail.name}</div>
-                      ))}
+                    <td className="px-6 py-4 font-semibold text-[#000] dark:text-white">
+                      {item?.type}
                     </td>
-                    <td className="flex px-5 py-3 space-x-5 items-center">
-                      <a
-                        href={`/updateCeremony/${item.id}`}
-                        className="py-2 text-green-600 font-medium"
+                    <td className="px-6 py-4 font-semibold text-[#000] dark:text-white">
+                      {item?.price}
+                    </td>
+                    <td
+                      className="px-2 py-4 text-[#000] font-semibold dark:text-white max-w-full overflow-hidden"
+                      title={item?.otherDetails?.map((detail) => detail.name + ",")}
+                    >
+                      {item?.otherDetails?.map((detail) => detail.name + ",")}
+                      {/* {item?.features[0].slice(0, 50)}... */}
+                    </td>
+                    <td className="py-4">
+                      <button
+                        className="font-medium px-4 py-1 w-full rounded bg-blue-600 hover:bg-blue-800 text-white dark:text-white"
+                        onClick={() => {
+                          navigate('/editTheater', { state: item });
+                        }}
                       >
                         Edit
-                      </a>
-                      <a href="#" className="py-2 text-red-500 font-medium">
+                      </button>
+                    </td>
+                    <td className="py-4">
+                      <button
+                        href="#"
+                        className="font-medium px-3 py-1 w-full rounded bg-red-600 hover:bg-red-800 text-white dark:text-white cursor-pointer"
+                        onClick={() => {
+                          handleModal(item?._id);
+                        }}
+                      >
                         Delete
-                      </a>
+                      </button>
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
           </table>
         </div>
