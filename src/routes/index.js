@@ -6,7 +6,8 @@ import { CreateCake } from '../pages/Cake/CreateCake';
 import UpdateCeremony from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
 import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
-import addTheater from '../pages/theater/addTheater';
+
+import AddTheater from '../pages/theater/AddTheater';
 
 
 
@@ -131,7 +132,7 @@ const coreRoutes = [
   {
     path: '/addTheater',
     title: 'Add theater',
-    component: addTheater,
+    component: AddTheater,
   },
 
 
