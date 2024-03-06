@@ -8,6 +8,8 @@ import Loader from './common/Loader';
 import routes from './routes';
 import Dashboard from './pages/Dashboard/Dashboard';
 import PageNotFound from './pages/PageNotFound';
+
+import TagInput from './components/TagInput';
 // ----------------------------------------------------------------------
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
@@ -42,6 +44,8 @@ function App() {
             element={isUserLoggedIn ? <Navigate to="/" /> : <SignUp />}
           />
           <Route path="*" element={<PageNotFound />} />
+
+          <Route path="/test" element={<TagInput />} />
 
           {/*  Protected Routes  */}
           <Route
