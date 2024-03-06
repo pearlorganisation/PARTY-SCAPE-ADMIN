@@ -7,9 +7,13 @@ export const getAllCakes = createAsyncThunk(
   'getCake',
   async (payload, { rejectWithValue }) => {
     try {
-      const { data } = await instance.get('/cake', payload, {
-        withCredentials: true,
-      });
+      const { data } = await instance.get(
+        '/cake',
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
 
       return data;
     } catch (e) {

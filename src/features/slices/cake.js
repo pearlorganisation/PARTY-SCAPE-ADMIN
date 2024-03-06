@@ -11,7 +11,7 @@ const initialState = {
 
 const cakeSlice = createSlice({
   name: 'cake',
-  initialState:{},
+  initialState,
   reducers: {
     
   },

@@ -10,7 +10,7 @@ export const injectStore = (_store) => {
 export const instance = axios.create({
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
-  baseURL: 'https://party-scape-backend.onrender.com/api/v1',
+  baseURL: "https://party-scape-backend.onrender.com/api/v1",
 });
 
 instance.interceptors.request.use(
