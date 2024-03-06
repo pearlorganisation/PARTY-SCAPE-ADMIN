@@ -7,19 +7,13 @@ export const getAllCakes = createAsyncThunk(
   'getCake',
   async (payload, { rejectWithValue }) => {
     try {
-<<<<<<< Updated upstream
-      const { data } = await instance.get('/cake', payload, {
-        withCredentials: true,
-      });
-=======
       const { data } = await instance.get(
-        'http://localhost:8000/api/v1/cake',
+        '/cake',
         payload,
         {
           withCredentials: true,
         }
       );
->>>>>>> Stashed changes
 
       return data;
     } catch (e) {

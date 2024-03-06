@@ -7,13 +7,9 @@ export const getAllTheaters = createAsyncThunk(
   'getTheater',
   async (payload, { rejectWithValue }) => {
     try {
-      const { data } = await instance.get(
-        'http://localhost:8000/api/v1/theater',
-        payload,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await instance.get('/theater', payload, {
+        withCredentials: true,
+      });
       console.log(data, 'datatattatatatat');
       return data;
     } catch (e) {
@@ -29,7 +25,7 @@ export const deleteTheater = createAsyncThunk(
     try {
       console.log(payload, 'payloaad');
       const response = await axios.delete(
-        `http://localhost:8000/api/v1/theater/${payload}`,
+        `/theater/${payload}`,
         {},
         { withCredentials: true }
       );
@@ -44,11 +40,9 @@ export const updateTheater = createAsyncThunk(
   'updateTheater',
   async ({ payload, id }, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(
-        `http://localhost:8000/api/v1/theater/${id}`,
-        payload,
-        { withCredentials: true }
-      );
+      const response = await axios.patch(`/theater/${id}`, payload, {
+        withCredentials: true,
+      });
       return response;
     } catch (e) {
       return rejectWithValue;

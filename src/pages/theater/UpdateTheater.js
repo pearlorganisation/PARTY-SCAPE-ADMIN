@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useForm ,useFieldArray} from "react-hook-form";
 
-const UpdateTheater = () => {
+const UpdateTheater = ({ id }) => {
+
+  const selectedTheater = theaterData.find((theater) => theater._id === id);
 
     const {register,handleSubmit,reset,control,}=useForm({
         defaultValues:{
@@ -22,7 +24,7 @@ const UpdateTheater = () => {
         });
       }
 
-      const [photo, setPhoto] = useState("");
+      const [photo, setPhoto] = useState(selectedtheater?.photo || '');
   const defaultPhoto =
     "https://via.placeholder.com/130?text=No+Image+Selected";
 

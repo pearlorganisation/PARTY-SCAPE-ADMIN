@@ -1,13 +1,13 @@
 import { lazy } from 'react';
-import ViewTheater from '../pages/theater.js/viewTheater';
+import ViewTheater from '../pages/theater/viewTheater';
 import {ViewCake} from '../pages/Cake/ViewCake';
 import UpdateCake from '../pages/Cake/UpdateCake';
 import { CreateCake } from '../pages/Cake/CreateCake';
 import UpdateCeremony from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
 import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
-import CreateTheater from '../pages/theater.js/CreateTheater';
-import UpdateTheater from '../pages/theater.js/UpdateTheater';
+import CreateTheater from '../pages/theater/CreateTheater';
+import UpdateTheater from '../pages/theater/UpdateTheater';
 
 
 
