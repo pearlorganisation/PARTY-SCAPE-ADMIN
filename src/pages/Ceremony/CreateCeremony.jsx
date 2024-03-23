@@ -78,7 +78,7 @@ export const CreateCeremony = () => {
           
             <label htmlFor="file" className="font-medium space-y-6"> Photo 
              
-            <img class="w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo || defaultPhoto} alt="No Image"/>
+            <img className="w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo || defaultPhoto} alt="No Image"/>
         
            
             <input
