@@ -21,11 +21,11 @@ export const getAllTheaters = createAsyncThunk(
 //delete theater api
 export const deleteTheater = createAsyncThunk(
   'deleteTheater',
-  async (payload, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      console.log(payload, 'payloaad');
-      const response = await axios.delete(
-        `/theater/${payload}`,
+      
+      const response = await instance.delete(
+        `/theater/${id}`,
         {},
         { withCredentials: true }
       );
@@ -40,12 +40,29 @@ export const updateTheater = createAsyncThunk(
   'updateTheater',
   async ({ payload, id }, { rejectWithValue }) => {
     try {
-      const response = await axios.patch(`/theater/${id}`, payload, {
+      const response = await instance.patch(`/theater/${id}`, payload, {
         withCredentials: true,
       });
       return response;
     } catch (e) {
       return rejectWithValue;
+    }
+  }
+);
+
+export const createTheater = createAsyncThunk(
+  'createTheater',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await instance.post(`/theater`, payload, {
+        withCredentials: true,
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
+      });
+      return response;
+    } catch (e) {
+      return rejectWithValue(e);
     }
   }
 );

@@ -1,32 +1,26 @@
-import { Link } from 'react-router-dom';
-// import
-import { useForm } from 'react-hook-form';
-import { login } from '../../features/actions/authenticationActions';
-import { useDispatch } from 'react-redux';
-import LogoDark from '../../images/logo/logo-dark.svg';
-import Logo from '../../images/logo/logo.svg';
+import { Link } from "react-router-dom";
+import LogoDark from "../../images/logo/logo-dark.svg";
+import Logo from "../../images/logo/logo.svg";
+import { useDispatch, } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { ClipLoader } from "react-spinners";
+import { logIn } from "../../features/actions/authenticationActions";
+
+
+
 // ----------------------------------------------------------------------------------
 const SignIn = () => {
-  const dispatch = useDispatch();
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isValid, dirtyFields },
-    getValues,
-    setValue,
-    watch,
-    reset,
-    resetField,
-    getFieldState,
-  } = useForm({
-    mode: 'onTouched',
-    defaultValues: {},
-  });
 
-  const onSubmit = (data) => {
-    dispatch(login(data));
-  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+ 
+  const {register,handleSubmit,formState: { errors },} =useForm()
+
+  const onSubmit = data=>{
+    console.log("data",data)
+    dispatch(logIn(data))}
+ 
 
   return (
     <>
@@ -173,7 +167,7 @@ const SignIn = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In to Petheeds App
+                Sign In to Tasks Management App
               </h2>
 
               <form onSubmit={handleSubmit(onSubmit)}>
@@ -183,15 +177,10 @@ const SignIn = () => {
                   </label>
                   <div className="relative">
                     <input
+                    {...register("email",{required: "email is required"})}
                       type="email"
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                      {...register('email', {
-                        required: {
-                          value: true,
-                          message: ' email is required',
-                        },
-                      })}
                     />
 
                     <span className="absolute right-4 top-4">
@@ -212,35 +201,23 @@ const SignIn = () => {
                       </svg>
                     </span>
                   </div>
+                  {errors.email && (
+                    <span className="text-red-500">
+                      Email is required
+                    </span>
+                  )}
                 </div>
 
                 <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Re-type Password
+                    Password
                   </label>
                   <div className="relative">
                     <input
+                    {...register('password',{required:'password is required'})}
                       type="password"
-                      placeholder="6+ Characters, 1 Capital letter"
+                      placeholder="Enter your password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                      {...register('password', {
-                        required: {
-                          value: true,
-                          message: 'password is required',
-                        },
-                        // pattern: {
-                        //   value: customFieldregex,
-                        //   message: ' Name is invalid',
-                        // },,
-                        minLength: {
-                          value: 6,
-                          message: 'Name cannot be less than 2 characters.',
-                        },
-                        maxLength: {
-                          value: 20,
-                          message: 'Name cannot be more than 20 characters.',
-                        },
-                      })}
                     />
 
                     <span className="absolute right-4 top-4">
@@ -265,6 +242,11 @@ const SignIn = () => {
                       </svg>
                     </span>
                   </div>
+                  {errors.password && (
+                    <span className="text-red-500">
+                      Password is required
+                    </span>
+                  )}
                 </div>
 
                 <div className="mb-5">
@@ -314,7 +296,7 @@ const SignIn = () => {
 
                 <div className="mt-6 text-center">
                   <p>
-                    Don’t have any account?{' '}
+                    Don’t have any account?{" "}
                     <Link to="/auth/signup" className="text-primary">
                       Sign Up
                     </Link>

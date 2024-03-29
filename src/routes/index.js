@@ -3,11 +3,14 @@ import ViewTheater from '../pages/theater/viewTheater';
 import {ViewCake} from '../pages/Cake/ViewCake';
 import UpdateCake from '../pages/Cake/UpdateCake';
 import { CreateCake } from '../pages/Cake/CreateCake';
-import UpdateCeremony from '../pages/Ceremony/UpdateCeremony';
+import {UpdateCeremony} from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
 import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
 import CreateTheater from '../pages/theater/CreateTheater';
 import UpdateTheater from '../pages/theater/UpdateTheater';
+import SignIn from '../pages/Authentication/SignIn';
+import SignUp from '../pages/Authentication/SignUp';
+import ViewBooking from '../pages/Booking/ViewBooking';
 
 
 
@@ -24,13 +27,10 @@ const Settings = lazy(() => import('../pages/Settings'));
 // ------------------------------------------------------------------------------
 
 // New Routes
-const CreateUser = lazy(() =>
-  import('../pages/Authentication/users/CreateUser')
-);
+
 const ViewUsers = lazy(() => import('../pages/Authentication/users/ViewUsers'));
-const UpdateUser = lazy(() =>
-  import('../pages/Authentication/users/UpdateUser')
-);
+
+
 
 const CreateRole = lazy(() =>
   import('../pages/Authentication/roles/CreateRole')
@@ -101,21 +101,23 @@ const coreRoutes = [
 
   // New Routes
   // Users Routes
-  {
-    path: '/users/createUser',
-    title: 'Create User',
-    component: CreateUser,
-  },
+ 
   {
     path: '/users/viewUsers',
     title: 'View Users',
     component: ViewUsers,
   },
   {
-    path: '/users/updateUser/:userId',
-    title: 'Update User',
-    component: UpdateUser,
+    path: '/auth/signin',
+    title: 'Login',
+    component: SignIn,
   },
+  {
+    path: '/auth/signup',
+    title: 'Signup',
+    component:SignUp,
+  },
+  
 
   //theater routes
   {
@@ -123,6 +125,7 @@ const coreRoutes = [
     title: 'view theater',
     component: ViewTheater,
   },
+ 
   {
     path: '/updateTheater/:id',
     title: 'edit theater',
@@ -133,6 +136,13 @@ const coreRoutes = [
     title: 'create theater',
     component: CreateTheater,
   },
+  // Booking Routes
+  {
+    path: '/bookings',
+    title: 'view booking',
+    component: ViewBooking,
+  },
+
   //Cake routes
   {
     path: '/cakes',
@@ -165,39 +175,9 @@ const coreRoutes = [
     title: 'create ceremony',
     component: CreateCeremony,
   },
-  // Roles Routes
-  {
-    path: '/updateTheater',
-    title: 'update theater',
-    component: CreateRole,
-  },
-  {
-    path: '/roles/viewRoles',
-    title: 'View Roles',
-    component: ViewRoles,
-  },
-  {
-    path: '/roles/updateRole/:roleId',
-    title: 'Update Role',
-    component: UpdateRole,
-  },
+ 
 
-  // Permissions Routes
-  {
-    path: '/permissions/createPermission',
-    title: 'Create Permission',
-    component: CreatePermission,
-  },
-  {
-    path: '/permissions/viewPermissions',
-    title: 'View Permissions',
-    component: ViewPermissions,
-  },
-  {
-    path: '/permissions/updatePermission/:permissionId',
-    title: 'Update Permission',
-    component: UpdatePermission,
-  },
+
 ];
 
 const routes = [...coreRoutes];

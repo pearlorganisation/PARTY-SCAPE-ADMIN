@@ -65,14 +65,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-10 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       <div className="flex items-center justify-between gap-2 py-5.5 lg:py-6.5">
         <NavLink to="/">
           <h2 className="text-white text-3xl font-bold text-center">
-            Tasks Management Admin Panel
+            Party Scape Admin Panel
           </h2>
         </NavLink>
 
@@ -173,18 +173,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 }}
               </SidebarLinkGroup>
 
-              <li>
-                <NavLink
-                  to="/users/viewUsers"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('/users/viewUsers') &&
-                    'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  <PeopleOutlinedIcon/>
-                  Manage Users
-                </NavLink>
-              </li>
+             
               <li>
                 <NavLink
                   to="/theaters"
@@ -197,55 +186,20 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   Manage Theaters
                 </NavLink>
               </li>
+             
               <li>
                 <NavLink
-                  to="/ceremony"
+                  to="/bookings"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes('/roles/viewRoles') &&
                     'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                
-                  <CelebrationOutlinedIcon  />
-                  Manage Ceremonies
+                  <PeopleOutlinedIcon/>
+                  Manage Bookings
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  to="/cakes"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('/roles/viewRoles') &&
-                    'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                   <CakeOutlinedIcon/>
-                  Manage Cakes
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/permissions/viewPermissions"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('/permissions/viewPermissions') &&
-                    'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  <AdminPanelSettingsOutlinedIcon/>
-                  Manage Permissions
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/memberships/viewMemberships"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('/memberships/viewMemberships') &&
-                    'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  <CardMembershipOutlinedIcon/>
-                  Manage Memberships
-                </NavLink>
-              </li>
+              
               <li>
                 <NavLink
                   to="/payments/viewPayments"

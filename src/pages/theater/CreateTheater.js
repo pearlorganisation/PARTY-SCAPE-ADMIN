@@ -1,28 +1,62 @@
 import React, { useState } from "react";
-import { useForm ,useFieldArray} from "react-hook-form";
+import { useDispatch,useSelector } from "react-redux";
+import { useForm ,useFieldArray, Controller} from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
+import Select from 'react-select'
+import { ClipLoader } from "react-spinners";
+import { createTheater } from "../../features/actions/theater";
+
 
 const CreateTheater = () => {
+  const navigate=useNavigate()
+  const dispatch = useDispatch();
 
-    const {register,handleSubmit,reset,control,}=useForm({
-        defaultValues:{
-        features:[{name:""}]
-        }
-        
-      })
 
-      const { fields, append, remove } = useFieldArray({
-        control,
-        name: "features"
-      })
+  
+  const {theaterData,isLoading} = useSelector((state)=>state.theater)
+
+    const {register,handleSubmit,control,formState: { errors },}=useForm({
+      defaultValues:{
+        slots: [{ startTime: "", endTime:"",theaterPrice:"", decorationPrice:"",offerPrice:"",totalPrice:""}],
+        features: [{name:""}],
+          occupancyDetails: { max: "", maxPaid: "", extraCharges:"" },
+      }
+    })
+
+      const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
+  control,
+  name: "features"
+});
+
+const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldArray({
+  control,
+  name: "slots"
+});
+
 
       const onSubmit = data =>{
         console.log('data',data)
-        reset({
-          name: "",
-      price: "",
-      
-        });
+        const formData = new FormData()
+        formData.append("theaterName",data?.theaterName)
+        formData.append("location",data?.location)
+        formData.append("videoUrl",data?.videoUrl)
+        formData.append("showCake",data?.showCake)
+        formData.append("features",data?.features)
+        formData.append("slots",data?.slots)
+        formData.append("occupancyDetails",data?.occupancyDetails)
+        Array.from(data?.logo).forEach((img) => {
+          formData.append("logo",img)
+          })
+          Array.from(data?.gallery).forEach((img) => {
+            formData.append("gallery", img);
+          });
+
+          dispatch(createTheater(formData));
       }
+
+      const [selectedPhoto,setSelectedPhoto]=useState("")
+const [selectedGallery,setSelectedGallery]=useState([])
 
       const [photo, setPhoto] = useState("");
   const defaultPhoto =
@@ -32,7 +66,7 @@ const CreateTheater = () => {
   
    const handlePhotoChange = (e) => {
         const selectedPhoto = e.target.files[0];
-    
+        setSelectedPhoto(e.target.files)
         if (selectedPhoto) {
           
           const reader = new FileReader();
@@ -42,29 +76,49 @@ const CreateTheater = () => {
           };
         }
       };
-   const handleGalleryChange = (e) => {
-    const selectedImages = e.target.files;
+      const handleGalleryChange = (e) => {
+        const selectedImages = e.target.files;
+    
+        if (selectedImages.length > 0) {
+          // Create an array to store file objects
+          const imagesArray = [];
+    
+          Array.from(selectedImages).forEach((image) => {
+            // Create a new File object
+            const fileObject = new File([image], image.name, {
+              type: image.type,
+            });
+    
+            imagesArray.push(fileObject);
+          });
+    
+          // Update the state with the array of file objects
+          setSelectedGallery((prevGallery) => [...prevGallery, ...imagesArray]);
+    // Convert the file objects to base64 for UI display
+const base64Array = [];
 
-    if (selectedImages.length > 0) {
-      // Create an array to store base64 representations of selected images
-      const imagesArray = [];
-  
-      Array.from(selectedImages).forEach((image) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(image);
-        reader.onloadend = () => {
-          
-          imagesArray.push(reader.result);
-          
-          // Check if all images have been processed
-          if (imagesArray.length === selectedImages.length) {
-            // Update the state with the array of base64 representations
-            setGallery((prevGallery) => [...prevGallery, ...imagesArray]);
-          }
-        };
-      });
-    }
-      };
+// Create a counter to keep track of when all images are processed
+let counter = 0;
+
+imagesArray.forEach((fileObject) => {
+const reader = new FileReader();
+reader.readAsDataURL(fileObject);
+reader.onloadend = () => {
+base64Array.push(reader.result);
+
+// Increment the counter
+counter++;
+
+// Check if all images are processed
+if (counter === imagesArray.length) {
+  // Update the state with the base64Array
+  setGallery(base64Array
+    );
+}
+};
+});
+}
+};
       const removeImage = (index) => {
         setGallery((prevGallery) => {
           const updatedGallery = [...prevGallery];
@@ -77,115 +131,132 @@ const CreateTheater = () => {
         <div className="bg-gray-800">
       <div className=" flex justify-center">
         <h3 className="text-gray-600 text-2xl font-semibold sm:text-3xl">
-          Create ceremony details
+          Create Theater details
         </h3>
       </div>
       <div className="bg-white rounded-lg shadow p-4 py-6  sm:rounded-lg sm:max-w-5xl mt-8 mx-auto">
         <form className="space-y-6 mx-8 sm:mx-2" onSubmit={handleSubmit(onSubmit)}>
-          <div className="sm:flex justify-between">
-          <div>
+          <div className="sm:flex space-y-6 sm:space-y-0 justify-between gap-10">
+          <div className="w-full">
             <label className="font-medium">Theater Name</label>
             <input 
-            {...register('name', { required: 'Name is required' })}
+            {...register('theaterName', { required: 'Theater Name is required' })}
               type="text"
-              required
-              className="w-full mt-2 me-40 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
+            {errors.theaterName && (
+                    <span className="text-red-500">
+                      Theater Name is required
+                    </span>
+                  )}
           </div>
-          <div className="mt-4 sm:mt-0">
+          <div className="w-full">
             <label className="font-medium">Location</label>
             <input
-            {...register('price', { required: 'Price is required' })}
+            {...register('location', { required: 'Location is required' })}
               type="text"
-              required
-              className="w-full mt-2 me-50 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
+            {errors.location && (
+                    <span className="text-red-500">
+                      Location is required
+                    </span>
+                  )}
           </div>
             </div>
-          <div className="sm:flex justify-between">
-          <div>
-            <label className="font-medium">Theater Charges</label>
-            <input 
-            {...register('name', { required: 'Name is required' })}
-              type="text"
-              required
-              className="w-full mt-2 me-35 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
-            />
-          </div>
-          <div className="mt-4 sm:mt-0">
-            <label className="font-medium">Decoration Charges</label>
-            <input
-            {...register('price', { required: 'Price is required' })}
-              type="text"
-              required
-              className="w-full mt-2 me-30 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
-            />
-          </div>
-            </div>
+          
         
            
-            <div className="sm:flex justify-between">
-            <div>
-            <label className="font-medium">Occupancy Details</label>
+            <div className="sm:flex space-y-6 sm:space-y-0 justify-between gap-10">
+            <div className="w-full">
+            <label className="font-medium">Video URL</label>
             <input 
-            {...register('name', { required: 'Name is required' })}
+            {...register('videoUrl')}
               type="text"
-              required
-              className="w-full mt-2 me-31 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
           </div>
-            <div className="">
-              <div className="flex">
-            <label className="font-medium sm:me-[387px]">Features</label>
-            <button
-        type="button"
-        className=" border rounded-md bg-pink-700 text-white text-sm font-bold px-2 hover:bg-slate-950"
-        onClick={() => append({ name: ""})}
-      >
-        +
-      </button>
-            </div>
-            <ul>
-        {fields.map((item, index) => (
-          <li key={item.id}>
-            <input className="w-full mt-2 px-5 sm:px-4 py-2 border-slate-300 text-gray-500 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg" type="text"
-             {...register(`otherDetails.${index}.name`)}/>
-            { index>0 && (
-            <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() => remove(index)}>Delete</button>)
-}
-          </li>
-        ))}
-      </ul>
-      
-              </div>
+            <div className="w-full">
+            <label className="font-medium">Show Cake</label>
+            <Controller 
+                                      control={control}
+                                      name="showCake"
+                                      render={({ field, fieldState:{error} }) => (
+                                          <Select
+                                              value={field.value}
+                                              options={[  { value: "true", label: "True" },{ value: "false", label: "False" },
+                                            ]}
+                                              onChange={(selectedOption) => field.onChange(selectedOption)}
+                                              className="mt-2 "
+                                              placeholder="Show Cake "
+                                             
+                                              styles={{
+                                                  control: (provided) => ({
+                                                      ...provided,
+                                                      border: '1px solid #CBD5E1', // Set custom border style
+                                                      borderRadius: '0.400rem', // Set custom border radius
+                                                      height: '40px', // Add height here
+                                                  }),
+                                                  placeholder: (provided) => ({
+                                                      ...provided,
+                                                      color: '#9CA3AF', // Set custom placeholder color
+                                                  }),
+                                              }}
+ 
+                                          />
+                                     )}
+                                      rules={{ required: true }}
+                                      
+                                  />
+                                  {errors?.showCake && (
+                                            <span className="text-red-500">
+                                                Show Cake is required
+                                            </span>
+                                        )}
+                                 
           </div>
-          <div className="sm:flex justify-between">
-          <div>
+            
+          </div>
           
-            <label htmlFor="file" className="font-medium space-y-6"> Photo 
+          <div className="sm:flex space-y-6 sm:space-y-0 justify-between gap-10">
+          <div className="w-full">
+          
+            <div className="font-medium space-y-6"> Logo
              
-            <img class="w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo || defaultPhoto} alt="No Image"/>
-        
+            <img class="mt-2 w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo || defaultPhoto} alt="No Image"/>
+            <label htmlFor="file_input" className="flex
+            " ><InsertPhotoOutlinedIcon/>
+            <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
            
             <input
-             {...register('photo', { required: 'Photo is required' })}
-             onChange={handlePhotoChange}
-             className="block w-54 sm:w-[468px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
-            </label>
+             {...register('logo', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
+           
+             className="hidden w-54 sm:w-[455px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
+              {errors.logo && (
+                    <span className="text-red-500">
+                      Photo is required
+                    </span>
+                  )}
             </div>
-          <div>
+           
+            </div>
+          <div className="w-full">
           
-            <label htmlFor="file" className="font-medium space-y-6"> Gallery 
-             <div className="flex flex-wrap sm:w-[450px] sm:h-[140px] overflow-auto">
+            <div className="font-medium space-y-6 "> Gallery 
+             <div className="flex mt-2 flex-wrap sm:h-[140px] overflow-auto">
             
              {gallery.map((image, index) => (
           <div key={index} className="relative mr-5">
-            <img
+           <div className="w-full mt-2"> <img
               className="w-20 h-20 sm:w-18 sm:h-16 mr-5 rounded cursor-pointer"
               src={image}
               alt={`Gallery Image ${index + 1}`}
               onClick={() => removeImage(index)}
             />
+            </div>
             <div
               className="absolute top-0 right-0 px-1 cursor-pointer bg-rose-400 rounded-md hover:bg-red-600"
               onClick={() => removeImage(index)}
@@ -196,25 +267,221 @@ const CreateTheater = () => {
         ))}
             </div>
     
-           
+            <label htmlFor="gallery_input" className="flex" >
+    <InsertPhotoOutlinedIcon/>
+    <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div>
+  </label>
             <input
-             {...register('gallery', { required: 'Photo is required' })}
-             onChange={handleGalleryChange}
-             className="block w-54 sm:w-[475px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="gallery_input" type="file"
+             {...register('gallery', {onChange:(e)=>{handleGalleryChange(e)} })}
+             
+             className="hidden w-54 sm:w-[475px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+             id="gallery_input" 
+             type="file"
              multiple
              />
-            </label>
+             
             </div>
             </div>
-            <div>
-            <label className="font-medium">Slots</label>
+            </div>
+            <div className="w-full">
+              <div className=" flex justify-between">
+            <label className="font-bold sm:me-[387px] text-black">Features</label>
+            <button
+        type="button"
+        className=" border rounded-md  bg-pink-700 text-white font-semibold text-xl px-2 hover:bg-slate-950"
+        onClick={() => appendFeature({ name: ""})}
+      >
+        +
+      </button>
+            </div>
+            <ul>
+        {featureFields.map((item, index) => (
+          <li key={item.id}>
+            <input className="w-full mt-2 px-5 sm:px-4 py-2 border-slate-300 text-gray-500 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg" type="text"
+             {...register(`features.${index}.name`,{required:"Features is Required"})}/>
+            { index>0 && (
+            <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() =>removeFeature(index)}>Delete</button>)
+}
+          </li>
+        ))}
+      </ul>
+      {errors.features && (
+                    <span className="text-red-500">
+                      Features is required
+                    </span>
+                  )}
+      
+              </div>
+           
+             < div className="flex justify-between">
+            <label className="font-bold text-black">Slots</label>
+            <button
+        type="button"
+        className=" border rounded-md  bg-pink-700 text-white font-semibold text-xl px-2 hover:bg-slate-950"
+        onClick={() => appendSlot({ slots: ""})}
+      >
+        +
+      </button>
+            </div>
+            <ul>
+        {slotFields.map((item, index) => (
+          <li key={item.id}>
+         
+<div className="space-y-5 ">
+<div className="sm:flex justify-between gap-10">
+  <div className="w-full">
+    <label className="font-medium">Start Time</label>
+    <div className="flex items-center mt-2">
+      <input 
+        {...register(`slots.${index}.startTime`,{ required: 'Start Time is required' })}
+        type="text"
+        
+        className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+      />
+      <select
+        className="w-20 px-2 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg ml-2"
+        {...register(`slots.${index}.startTimePeriod`,{ required: 'Start Time Period is required' })}
+      >
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  </div>
+  <div className="w-full">
+    <label className="font-medium">End Time</label>
+    <div className="flex items-center mt-2">
+      <input 
+        {...register(`slots.${index}.endTime`,{ required: 'End Time is required' })}
+        type="text"
+        
+        className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+      />
+      <select
+        className="w-20 px-2 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg ml-2"
+        {...register(`slots.${index}.endTimePeriod`,{ required: 'End Time Period is required' })}
+      >
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div className="sm:flex justify-between gap-10">
+          <div className="w-full">
+            <label className="font-medium">Theater Price</label>
             <input 
-            {...register('name', { required: 'Name is required' })}
+             {...register(`slots.${index}.theaterPrice`,{ required: 'Theater Price is required' })}
               type="text"
-              required
-              className="w-full mt-2 me-40 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
           </div>
+          <div className="w-full">
+            <label className="font-medium">Decoration Price</label>
+            <input
+            {...register(`slots.${index}.decorationPrice`,{ required: 'Decoration Price is required' })}
+              type="text"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+          </div>
+            </div>
+
+<div className="sm:flex justify-between gap-10">
+          <div className="w-full">
+            <label className="font-medium">Offer Price</label>
+            <input 
+             {...register(`slots.${index}.offerPrice`,{ required: 'Offer Price is required' })}
+              type="text"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+          </div>
+          <div className="w-full">
+            <label className="font-medium">Total Price</label>
+            <input
+            {...register(`slots.${index}.totalPrice`,{ required: 'Total Price is required' })}
+              type="text"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+          </div>
+
+          </div>
+
+            </div>
+                 
+            { index>0 && (
+            <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() => removeSlot(index)}>Delete</button>)
+}
+          </li>
+          
+        ))}
+      </ul>
+      {errors.slots && (
+            <span className="text-red-500">
+              All Slots Fields are required
+            </span>
+          )}
+             < div className="flex justify-between">
+            <label className="font-bold text-black">Occupancy Details</label>
+      
+            </div>
+            <ul>
+        
+         
+<div className="space-y-5 ">
+<div className="sm:flex justify-between gap-10">
+  <div className="w-full">
+    <label className="font-medium">Max</label>
+    <div className="flex items-center mt-2">
+      <input 
+        {...register(`occupancyDetails.max`)}
+        type="text"
+    
+        className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+      />
+    
+    </div>
+  </div>
+  <div className="w-full">
+    <label className="font-medium">Max Paid</label>
+    <div className="flex items-center mt-2">
+      <input 
+        {...register(`occupancyDetails.maxPaid`)}
+        type="text"
+        
+        className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+      />
+     
+    </div>
+  </div>
+</div>
+
+
+
+<div>
+          <div className="sm:w-[467px]">
+            <label className="font-medium">Extra Charges</label>
+            <input 
+             {...register(`occupancyDetails.extraCharges`)}
+              type="text"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+          </div>
+         
+
+          </div>
+
+            </div>
+                 
+       
+         
+      </ul>
+      
+            
           <div style={{ marginTop: '4rem' }}>
               <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
                 Create
