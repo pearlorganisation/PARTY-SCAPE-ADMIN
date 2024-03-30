@@ -11,6 +11,7 @@ import UpdateTheater from '../pages/theater/UpdateTheater';
 import SignIn from '../pages/Authentication/SignIn';
 import SignUp from '../pages/Authentication/SignUp';
 import ViewBooking from '../pages/Booking/ViewBooking';
+import CreateBooking from '../pages/Booking/CreateBooking';
 
 
 
@@ -141,6 +142,11 @@ const coreRoutes = [
     path: '/bookings',
     title: 'view booking',
     component: ViewBooking,
+  },
+  {
+    path: '/createBooking',
+    title: 'create booking',
+    component: CreateBooking,
   },
 
   //Cake routes

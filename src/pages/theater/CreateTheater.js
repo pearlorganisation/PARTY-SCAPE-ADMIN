@@ -37,21 +37,26 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
 
       const onSubmit = data =>{
         console.log('data',data)
+        const {showCake} =data
+        const showCakeValue = showCake.value
         const formData = new FormData()
         formData.append("theaterName",data?.theaterName)
         formData.append("location",data?.location)
         formData.append("videoUrl",data?.videoUrl)
-        formData.append("showCake",data?.showCake)
+        formData.append("showCake",data?.showCakeValue)
         formData.append("features",data?.features)
         formData.append("slots",data?.slots)
         formData.append("occupancyDetails",data?.occupancyDetails)
-        Array.from(data?.logo).forEach((img) => {
-          formData.append("logo",img)
-          })
-          Array.from(data?.gallery).forEach((img) => {
-            formData.append("gallery", img);
-          });
-
+        // Array.from(data?.logo).forEach((img) => {
+        //   formData.append("logo",img)
+        //   })
+        //   Array.from(data?.gallery).forEach((img) => {
+        //     formData.append("gallery", img);
+        //   });
+        console.log(showCakeValue)
+  
+  console.log("formdata", formData.getAll('showCake'));
+  console.log("showcake::",data?.showCakeValue)
           dispatch(createTheater(formData));
       }
 
@@ -232,14 +237,14 @@ if (counter === imagesArray.length) {
             <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
            
             <input
-             {...register('logo', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
+            //  {...register('logo', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
            
              className="hidden w-54 sm:w-[455px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
-              {errors.logo && (
+              {/* {errors.logo && (
                     <span className="text-red-500">
                       Photo is required
                     </span>
-                  )}
+                  )} */}
             </div>
            
             </div>
@@ -272,7 +277,7 @@ if (counter === imagesArray.length) {
     <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div>
   </label>
             <input
-             {...register('gallery', {onChange:(e)=>{handleGalleryChange(e)} })}
+            //  {...register('gallery', {onChange:(e)=>{handleGalleryChange(e)} })}
              
              className="hidden w-54 sm:w-[475px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
              id="gallery_input" 
