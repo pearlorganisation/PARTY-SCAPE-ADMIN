@@ -1,32 +1,29 @@
-// AdminPanel.js
 
 import React, { useEffect, useState } from 'react';
 import Delete from '../../components/Delete';
 import { useSelector, useDispatch } from 'react-redux';
-import {useNavigate } from 'react-router';
+import {  useNavigate } from 'react-router';
+
 import { Stack,Skeleton } from '@mui/material';
-import { deleteTheater, getAllTheaters } from '../../features/actions/theater';
-import ViewModalTheater from './ViewModalTheater'; 
+import { deleteBooking, getAllBookings } from '../../features/actions/booking';
+import ViewModalBooking from './ViewModalBooking';
 
 
-const ViewTheater = () => {
+
+const ViewBookings = () => {
+  const { bookingData, isLoading, isDeleted } = useSelector((state) => state.booking);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { theaterData, isLoading } = useSelector((state) => state.theater);
-
   useEffect(() => {
-    const fetchData = async()=>{
-      try{
-       
-        dispatch(getAllTheaters());
-      }
-      catch(error){
-       console.error("Error fetching theaters:",error)
-      }
-    }
-    fetchData();
-  }, [dispatch]);
+    dispatch(getAllBookings());
+   }, []);
+ 
+   useEffect(() => {
+ if(isDeleted){
+   dispatch(getAllBookings());
+ }
+   }, [isDeleted]);
  
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -35,7 +32,7 @@ const ViewTheater = () => {
 
   const [id, setId] = useState();
   const handleDelete = () => {
-    dispatch(deleteTheater(id));
+    dispatch(deleteBooking(id));
     setShowDeleteModal(false);
     setId('');
   };
@@ -44,46 +41,48 @@ const ViewTheater = () => {
     setShowDeleteModal(true);
     setId(ID);
   }; 
-  
+
+
   const handleViewModal = (item) => {
     setShowViewModal(true);
     setViewData(item);
   };
-  const handleAddTheater = () => {
-    navigate('/createTheater');
-  };
 
+  const handleAddBooking = () =>{
+ navigate("/createBooking")
 
+  }
+ 
   return (
     <>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
         <div className="items-start justify-between md:flex">
           <div className="max-w-lg">
             <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
-              Manage Theaters
+              Manage Bookings
             </h3>
             <p className="text-gray-600 mt-2">
-            This page is for handle Theater data by Create, View, Edit and Delete
+              This page is for handle bookings by Create, View and Delete
             </p>
           </div>
-          <div className="mt-3 md:mt-0">
-            <a
-              onClick={handleAddTheater}
+          <a
+              onClick={handleAddBooking}
               className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
             >
-              Add theater
+              Add Booking
             </a>
-          </div>
         </div>
         <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
           <table className="w-full table-auto text-sm text-left">
             <thead className="bg-gray-50 text-gray-600 font-medium border-b">
               <tr>
-                <th className="py-3 px-6">ID</th>
-                <th className="py-3 px-6 text-center">Theater Name</th>
-                <th className="py-3 px-6 text-center">Logo</th>
-                <th className="py-3 px-6 text-center">Features</th>
-                <th className="py-3 px-6 text-center ">Actions</th>
+                <th className="py-3 px-6">Booking ID</th>
+                <th className="py-3 px-6">Name</th>
+                <th className="py-3 px-6">Date</th>
+                <th className="py-3 px-6">Booked Slot</th>
+                <th className="py-3 px-6">Theater Name</th>
+                <th className="py-3 px-6">Actions</th>
+               
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
@@ -100,39 +99,37 @@ const ViewTheater = () => {
             </td>
           </tr>
           ) : (
-                theaterData?.map((item, idx) => (
+            
+               Array.isArray(bookingData) && bookingData?.map((item, idx) => (
                   <tr key={idx}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.theaterName}
+                      {item?.bookedBy.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <img className='rounded-lg' src={`${item?.logo?.path}`} />
+                    {item?.bookedDate}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.features[0].slice(0, 50)}...
+                    {item?.bookedSlot}
                     </td>
-                    <td className="text-right px-6 whitespace-nowrap">
-                      <a
-                        onClick={()=>{handleViewModal(item)
-                        }}
-                        className="py-2 px-3 font-medium text-blue-500 hover:text-blue-600 duration-150 hover:bg-gray-50 rounded-lg cursor-pointer"
+                    <td className="px-6 py-4 whitespace-nowrap">
+                    {item?.theater.theaterName}
+                    </td>
+                    
+                    <td className=" px-6 whitespace-nowrap">
+                     
+                      <button
+                          onClick={()=>{handleViewModal(item)
+                          }}
+                        className="py-2 leading-none font-semibold text-blue-500 hover:text-blue-600 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         View
-                      </a>
-                      <a
+                      </button>
+                      <button
                         onClick={() => {
                           handleModal(item?._id);
                         }}
-                        className="py-2 px-3 font-medium text-green-600 hover:text-green-500 duration-150 hover:bg-gray-50 rounded-lg cursor-pointer"
-                      >
-                        Edit
-                      </a>
-                      <button 
-                        onClick={() => {
-                          handleModal(item?._id);
-                        }}
-                        className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg cursor-pointer"
+                        className="py-2 leading-none px-3 font-semibold text-red-500 hover:text-red-600 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         Delete
                       </button>
@@ -148,11 +145,11 @@ const ViewTheater = () => {
       {showDeleteModal && (
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />
       )}
-      {showViewModal && (
-        <ViewModalTheater setModal={setShowViewModal}  viewData={viewData} />
+       {showViewModal && (
+        <ViewModalBooking setModal={setShowViewModal}  viewData={viewData} />
       )}
     </>
   );
 };
 
-export default ViewTheater;
+export default ViewBookings;

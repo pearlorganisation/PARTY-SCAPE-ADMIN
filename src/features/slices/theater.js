@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import toast from 'react-toastify';
 import {
   deleteTheater,
   getAllTheaters,
   updateTheater,
+  createTheater
 } from '../actions/theater';
+import toast from 'react-hot-toast';
 
 const initialState = {
   isLoading: false,
@@ -63,11 +64,31 @@ const theaterSlice = createSlice({
         state.isLoading = false;
         state.isUpdated = true;
       })
-      // .addCase(updateTheater.pending, (state, action) => {})
       .addCase(updateTheater.rejected, (state, action) => {
         state.isLoading = false;
         state.isUpdated = false;
         state.errorMessage = action.payload;
+      })
+
+      .addCase(createTheater.pending, (state, action) => {
+        state.isLoading = true;
+       
+      })
+      .addCase(createTheater.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.theaterData = action.payload.data;
+        toast.success("Theater Added successfully", {
+          position: "top-right",
+        });
+      })
+     
+      .addCase(createTheater.rejected, (state, action) => {
+        state.isLoading = false;
+      
+        state.errorMessage = action.payload ? action.payload : 'An error occurred while creating the theater.';
+        toast.error(state?.errorMessage, {
+          position: "top-right",
+        });
       });
   },
 });

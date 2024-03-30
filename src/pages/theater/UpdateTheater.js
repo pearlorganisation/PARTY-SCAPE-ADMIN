@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { useForm ,useFieldArray} from "react-hook-form";
+import { useLocation } from 'react-router-dom';
 
 const UpdateTheater = ({ id }) => {
 
-  const selectedTheater = theaterData.find((theater) => theater._id === id);
+  const { state: item } = useLocation();
 
     const {register,handleSubmit,reset,control,}=useForm({
         defaultValues:{
-        features:[{name:""}]
+          name: item?.theaterName || "",
+          location: item?.location || "",
+          theaterCharges: item?.theaterCharges || "",
+          decorationCharges: item?.decorationCharges || "",
+          features: item?.features.map((feature) => ({ name: feature })) || [{ name: "" }],
         }
         
       })
@@ -24,7 +29,7 @@ const UpdateTheater = ({ id }) => {
         });
       }
 
-      const [photo, setPhoto] = useState(selectedtheater?.photo || '');
+      const [photo, setPhoto] = useState(item?.logo?.path || '');
   const defaultPhoto =
     "https://via.placeholder.com/130?text=No+Image+Selected";
 
@@ -95,7 +100,7 @@ const UpdateTheater = ({ id }) => {
           <div className="mt-4 sm:mt-0">
             <label className="font-medium">Location</label>
             <input
-            {...register('price', { required: 'Price is required' })}
+            {...register('location', { required: 'Price is required' })}
               type="text"
               required
               className="w-full mt-2 me-50 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -106,7 +111,7 @@ const UpdateTheater = ({ id }) => {
           <div>
             <label className="font-medium">Theater Charges</label>
             <input 
-            {...register('name', { required: 'Name is required' })}
+            {...register('theaterCharges', { required: 'Name is required' })}
               type="text"
               required
               className="w-full mt-2 me-35 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -115,7 +120,7 @@ const UpdateTheater = ({ id }) => {
           <div className="mt-4 sm:mt-0">
             <label className="font-medium">Decoration Charges</label>
             <input
-            {...register('price', { required: 'Price is required' })}
+            {...register('decorationCharges', { required: 'Price is required' })}
               type="text"
               required
               className="w-full mt-2 me-30 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -149,7 +154,7 @@ const UpdateTheater = ({ id }) => {
         {fields.map((item, index) => (
           <li key={item.id}>
             <input className="w-full mt-2 px-5 sm:px-4 py-2 border-slate-300 text-gray-500 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg" type="text"
-             {...register(`otherDetails.${index}.name`)}/>
+              {...register(`features.${index}.name`)}/>
             { index>0 && (
             <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() => remove(index)}>Delete</button>)
 }
@@ -162,9 +167,9 @@ const UpdateTheater = ({ id }) => {
           <div className="sm:flex justify-between">
           <div>
           
-            <label htmlFor="file" className="font-medium space-y-6"> Photo 
+            <label htmlFor="file" className="font-medium space-y-6"> Logo 
              
-            <img class="w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo || defaultPhoto} alt="No Image"/>
+            <img class="w-20 h:20 sm:w-35 sm:h-35 rounded-lg" src={photo || defaultPhoto} alt="No Image"/>
         
            
             <input
@@ -217,7 +222,7 @@ const UpdateTheater = ({ id }) => {
           </div>
           <div style={{ marginTop: '4rem' }}>
               <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
-                Create
+                Update
               </button>
             </div>
         </form>

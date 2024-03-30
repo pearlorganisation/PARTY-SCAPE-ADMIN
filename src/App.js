@@ -16,7 +16,7 @@ function App() {
   let { isUserLoggedIn } = useSelector((state) => state.auth);
   console.log(isUserLoggedIn, 'isUserLoggedIn');
   const [loading, setLoading] = useState(true);
-  isUserLoggedIn= true
+  
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
