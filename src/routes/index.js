@@ -13,7 +13,7 @@ import SignUp from '../pages/Authentication/SignUp';
 import ViewBooking from '../pages/Booking/ViewBooking';
 import CreateBooking from '../pages/Booking/CreateBooking';
 import { UpdateCake } from '../pages/Cake/UpdateCake';
-import { ProspectiveCustomers } from '../pages/ProspectiveCustomer/ProspectiveCustomers';
+
 
 
 
@@ -184,12 +184,7 @@ const coreRoutes = [
     title: 'create ceremony',
     component: CreateCeremony,
   },
- //
- {
-  path: '/prospectiveCustomer',
-  title: 'view prospectiveCustomers',
-  component: ProspectiveCustomers,
-},
+ 
 
 
 ];
