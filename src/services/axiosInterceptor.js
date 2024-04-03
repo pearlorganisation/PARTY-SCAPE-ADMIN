@@ -26,7 +26,8 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response) => {
     return response;
-  },
+  }
+  ,
   async (error) => {
     let errorMessage = '';
     // Do something with response error

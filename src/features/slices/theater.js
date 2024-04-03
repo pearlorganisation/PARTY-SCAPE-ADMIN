@@ -11,6 +11,7 @@ const initialState = {
   isLoading: false,
   isUpdated: false,
   isSuccess: false,
+  isDeleted: false,
   errorMessage: '',
   theaterData: [],
 };
@@ -31,9 +32,9 @@ const theaterSlice = createSlice({
         state.isLoading = false;
         state.isUpdated = false;
         state.errorMessage = '';
-        console.log("API Response Payload:", action.payload);
+       
         state.theaterData = action.payload.data;
-        console.log("Reducer - Updated theaterData:", state.theaterData);
+        // console.log("Reducer - Updated theaterData:", state.theaterData);
       })
       .addCase(getAllTheaters.rejected, (state, action) => {
         state.isLoading = false;
@@ -43,15 +44,18 @@ const theaterSlice = createSlice({
       .addCase(deleteTheater.pending, (state, action) => {
         state.isLoading = true;
         state.isUpdated = false;
+        state.isDeleted = false;
       })
       .addCase(deleteTheater.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdated = false;
+        state.isDeleted=true;
       })
       .addCase(deleteTheater.rejected, (state, action) => {
         state.isLoading = false;
         state.isUpdated = false;
         state.errorMessage = action.payload;
+        state.isDeleted = false;
         state.theaterData = state.theaterData.filter(
           (theater) => theater._id !== action?.payload?.payload
         );
@@ -63,20 +67,23 @@ const theaterSlice = createSlice({
       .addCase(updateTheater.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdated = true;
+        state.theaterData = action.payload.data;
       })
       .addCase(updateTheater.rejected, (state, action) => {
         state.isLoading = false;
         state.isUpdated = false;
         state.errorMessage = action.payload;
+        
       })
 
       .addCase(createTheater.pending, (state, action) => {
         state.isLoading = true;
-       
+  
       })
       .addCase(createTheater.fulfilled, (state, action) => {
         state.isLoading = false;
         state.theaterData = action.payload.data;
+       
         toast.success("Theater Added successfully", {
           position: "top-right",
         });
@@ -84,7 +91,6 @@ const theaterSlice = createSlice({
      
       .addCase(createTheater.rejected, (state, action) => {
         state.isLoading = false;
-      
         state.errorMessage = action.payload ? action.payload : 'An error occurred while creating the theater.';
         toast.error(state?.errorMessage, {
           position: "top-right",

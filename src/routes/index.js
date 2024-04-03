@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 import ViewTheater from '../pages/theater/viewTheater';
 import {ViewCake} from '../pages/Cake/ViewCake';
-import UpdateCake from '../pages/Cake/UpdateCake';
+
 import { CreateCake } from '../pages/Cake/CreateCake';
 import {UpdateCeremony} from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
@@ -12,6 +12,7 @@ import SignIn from '../pages/Authentication/SignIn';
 import SignUp from '../pages/Authentication/SignUp';
 import ViewBooking from '../pages/Booking/ViewBooking';
 import CreateBooking from '../pages/Booking/CreateBooking';
+import { UpdateCake } from '../pages/Cake/UpdateCake';
 
 
 

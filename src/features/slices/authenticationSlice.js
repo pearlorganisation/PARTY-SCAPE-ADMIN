@@ -24,6 +24,7 @@ const initialState = {
   isPasswordReset: false,
   isMailSent: false,
   userData :[],
+  loginData :[],
 };
 
 // -------------------------------------- Slices------------------------------------------------
@@ -99,6 +100,7 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isOtpSentSuccessfully = true;
+        state.userData = action.payload.data
       })
       .addCase(generateLoginOTP.rejected, (state, action) => {
         state.isLoading = false;
@@ -123,6 +125,7 @@ const authSlice = createSlice({
         state.loggedInUserData = action.payload;
         state.isUserLoggedIn = true;
         state.isLogInSuccess = true;
+        state.loginData =action.payload.data
       })
       .addCase(logIn.rejected, (state, action) => {
         state.isLoading = false;

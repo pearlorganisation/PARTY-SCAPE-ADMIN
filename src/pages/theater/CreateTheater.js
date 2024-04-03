@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { useForm ,useFieldArray, Controller} from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,8 @@ const CreateTheater = () => {
 
     const {register,handleSubmit,control,formState: { errors },}=useForm({
       defaultValues:{
-        slots: [{ startTime: "", endTime:"",theaterPrice:"", decorationPrice:"",offerPrice:"",totalPrice:""}],
-        features: [{name:""}],
+        slots: [{ start: "", end:"",theaterPrice:"", decorationPrice:"",offerPrice:"",price:""}],
+        features: [],
           occupancyDetails: { max: "", maxPaid: "", extraCharges:"" },
       }
     })
@@ -37,26 +37,36 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
 
       const onSubmit = data =>{
         console.log('data',data)
+        // const temp = data?.slots?.map(item => {
+        //   const {startTime,startTimePeriod,endTimePeriod, endTime,totalPrice,...rest} = item
+        //   return {
+        //     ...rest,price:totalPrice,start: startTime+ ` ` + startTimePeriod,end: endTime+ ` ` + endTimePeriod
+        //   }
+        // })
+        // console.log(temp)
+
+       
         const {showCake} =data
         const showCakeValue = showCake.value
         const formData = new FormData()
         formData.append("theaterName",data?.theaterName)
         formData.append("location",data?.location)
         formData.append("videoUrl",data?.videoUrl)
-        formData.append("showCake",data?.showCakeValue)
-        formData.append("features",data?.features)
-        formData.append("slots",data?.slots)
-        formData.append("occupancyDetails",data?.occupancyDetails)
-        // Array.from(data?.logo).forEach((img) => {
-        //   formData.append("logo",img)
-        //   })
-        //   Array.from(data?.gallery).forEach((img) => {
-        //     formData.append("gallery", img);
-        //   });
-        console.log(showCakeValue)
+        formData.append("showCake",showCakeValue)
+        formData.append("features",JSON.stringify(data?.features))
+        formData.append("slots",JSON.stringify(data?.slots))
+        formData.append("occupancyDetails",JSON.stringify(data?.occupancyDetails))
+        Array.from(data?.logo).forEach((img) => {
+          formData.append("logo",img)
+          })
+          Array.from(data?.gallery).forEach((img) => {
+            formData.append("gallery", img);
+          });
+        console.log(typeof (showCakeValue))
   
-  console.log("formdata", formData.getAll('showCake'));
-  console.log("showcake::",data?.showCakeValue)
+  // console.log("formdata", formData.getAll('showCake'));
+  // console.log("formdata", formData.getAll('features'));
+  // console.log("showcake::",showCakeValue)
           dispatch(createTheater(formData));
       }
 
@@ -131,6 +141,12 @@ if (counter === imagesArray.length) {
           return updatedGallery;
         });
       };
+
+      useEffect(()=>{
+        if(theaterData?.status){
+          navigate("/theaters")
+        }
+      },[theaterData])
   return (
     <div>
         <div className="bg-gray-800">
@@ -150,11 +166,11 @@ if (counter === imagesArray.length) {
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
-            {errors.theaterName && (
-                    <span className="text-red-500">
-                      Theater Name is required
-                    </span>
-                  )}
+            {errors && errors.theaterName && (
+  <span className="text-red-500">
+    {errors.theaterName.message}
+  </span>
+)}
           </div>
           <div className="w-full">
             <label className="font-medium">Location</label>
@@ -164,11 +180,11 @@ if (counter === imagesArray.length) {
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
-            {errors.location && (
-                    <span className="text-red-500">
-                      Location is required
-                    </span>
-                  )}
+           {errors && errors.location && (
+  <span className="text-red-500">
+    {errors.location.message}
+  </span>
+)}
           </div>
             </div>
           
@@ -192,7 +208,7 @@ if (counter === imagesArray.length) {
                                       render={({ field, fieldState:{error} }) => (
                                           <Select
                                               value={field.value}
-                                              options={[  { value: "true", label: "True" },{ value: "false", label: "False" },
+                                              options={[  { value: true, label: "True" },{ value: false, label: "False" },
                                             ]}
                                               onChange={(selectedOption) => field.onChange(selectedOption)}
                                               className="mt-2 "
@@ -216,11 +232,11 @@ if (counter === imagesArray.length) {
                                       rules={{ required: true }}
                                       
                                   />
-                                  {errors?.showCake && (
-                                            <span className="text-red-500">
-                                                Show Cake is required
-                                            </span>
-                                        )}
+                                 {errors && errors.showCake && (
+  <span className="text-red-500">
+    {errors.showCake.message}
+  </span>
+)}
                                  
           </div>
             
@@ -237,14 +253,14 @@ if (counter === imagesArray.length) {
             <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
            
             <input
-            //  {...register('logo', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
+             {...register('logo', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
            
              className="hidden w-54 sm:w-[455px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
-              {/* {errors.logo && (
+              {errors.logo && (
                     <span className="text-red-500">
                       Photo is required
                     </span>
-                  )} */}
+                  )}
             </div>
            
             </div>
@@ -277,7 +293,7 @@ if (counter === imagesArray.length) {
     <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div>
   </label>
             <input
-            //  {...register('gallery', {onChange:(e)=>{handleGalleryChange(e)} })}
+             {...register('gallery', {onChange:(e)=>{handleGalleryChange(e)} })}
              
              className="hidden w-54 sm:w-[475px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
              id="gallery_input" 
@@ -294,7 +310,7 @@ if (counter === imagesArray.length) {
             <button
         type="button"
         className=" border rounded-md  bg-pink-700 text-white font-semibold text-xl px-2 hover:bg-slate-950"
-        onClick={() => appendFeature({ name: ""})}
+        onClick={() => appendFeature("")}
       >
         +
       </button>
@@ -303,7 +319,7 @@ if (counter === imagesArray.length) {
         {featureFields.map((item, index) => (
           <li key={item.id}>
             <input className="w-full mt-2 px-5 sm:px-4 py-2 border-slate-300 text-gray-500 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg" type="text"
-             {...register(`features.${index}.name`,{required:"Features is Required"})}/>
+             {...register(`features.${index}`,{required:"Features is Required"})}/>
             { index>0 && (
             <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() =>removeFeature(index)}>Delete</button>)
 }
@@ -338,36 +354,38 @@ if (counter === imagesArray.length) {
     <label className="font-medium">Start Time</label>
     <div className="flex items-center mt-2">
       <input 
-        {...register(`slots.${index}.startTime`,{ required: 'Start Time is required' })}
-        type="text"
-        
+        {...register(`slots.${index}.start`,{ required: 'Start Time is required' })}
+        placeholder="0:00 Format"
+        type="time"
+       
         className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
       />
-      <select
+      {/* <select
         className="w-20 px-2 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg ml-2"
         {...register(`slots.${index}.startTimePeriod`,{ required: 'Start Time Period is required' })}
       >
         <option value="AM">AM</option>
         <option value="PM">PM</option>
-      </select>
+      </select> */}
     </div>
   </div>
   <div className="w-full">
     <label className="font-medium">End Time</label>
     <div className="flex items-center mt-2">
       <input 
-        {...register(`slots.${index}.endTime`,{ required: 'End Time is required' })}
-        type="text"
+        {...register(`slots.${index}.end`,{ required: 'End Time is required' })}
+        placeholder="0:00 Format"
+        type="time"
         
         className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
       />
-      <select
+      {/* <select
         className="w-20 px-2 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg ml-2"
         {...register(`slots.${index}.endTimePeriod`,{ required: 'End Time Period is required' })}
       >
         <option value="AM">AM</option>
         <option value="PM">PM</option>
-      </select>
+      </select> */}
     </div>
   </div>
 </div>
@@ -406,7 +424,7 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Total Price</label>
             <input
-            {...register(`slots.${index}.totalPrice`,{ required: 'Total Price is required' })}
+            {...register(`slots.${index}.price`,{ required: 'Total Price is required' })}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -488,8 +506,10 @@ if (counter === imagesArray.length) {
       
             
           <div style={{ marginTop: '4rem' }}>
-              <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
-                Create
+              <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-pink-800 active:bg-indigo-600 rounded-lg duration-150">
+              {isLoading ? (
+                <ClipLoader color="#c4c2c2" />
+              ) : (<>Create</>)}
               </button>
             </div>
         </form>
