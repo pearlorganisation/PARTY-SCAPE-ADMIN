@@ -1,104 +1,215 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useForm ,Controller,useFieldArray} from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import Select from "react-select";
+import { updateCake } from "../../features/actions/cake";
+import { ClipLoader } from "react-spinners";
+import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 
-import { tableItems } from './ViewCake';
-import { useForm } from "react-hook-form";
-const UpdateCake = () => {
-  const { id } = useParams();
 
-  // Find the cake with the matching id in tableItems
-  const selectedCake = tableItems.find((cake) => cake.id === id);
 
-  const { register, handleSubmit, reset } = useForm();
+export const UpdateCake = () => {
+  const dispatch =useDispatch();
+  const navigate= useNavigate();
+  const {state:item}= useLocation();
 
-  // Use selectedCake data for initializing state or rendering  
+  const {cakeData,isLoading} = useSelector((state)=>state.cake)
 
- 
-  const [photo, setPhoto] = useState(selectedCake?.photo || "");
-  
-  useEffect(() => {
-    if (selectedCake) {
-      reset({
-      name:selectedCake.name || "",
-      price:selectedCake.price || "",
-      photo:selectedCake.photo || ""
-    })
+  const {register,handleSubmit,formState: { errors },control}=useForm({
+    defaultValues:{
+      name:item?.name ,
+      price:item?.price,
+       isEggless:[  { value: true, label: "True" },{ value: false, label: "False" }].find(c => c.value === item.isEggless)
+      
     }
+  })
+  const[ selectedPhoto,setSelectedPhoto]= useState("")
 
-  }, [selectedCake,reset]);
-  
-  const onSubmit = (data) => {
+  const { fields: priceFields, append: appendPrice, remove: removePrice } = useFieldArray({
+    control,
+    name: "price"
+  });
+
+  const onSubmit = data =>{
+    console.log('data',data)
+
+    const {isEggless}= data
+   const isEgglessValue= isEggless.value;
+
+   const formData = new FormData();
+   formData.append("name",data?.name)
+   formData.append("isEggless",isEgglessValue)
+   formData.append("price",JSON.stringify(data?.price))
+    Array.from(data?.image).forEach((img) => {
+          formData.append("image",img)
+          })
+          console.log("formData",formData.getAll("isEggless"))
+  dispatch(updateCake({payload:formData, id:item._id}))
+ }
+
+
  
-    console.log("Form submitted", data);
-    reset();
-  };
-
-  const handlePhotoChange = (e) => {
-    const selectedPhoto = e.target.files[0];
-
-    if (selectedPhoto) {
-      // Get the base64 representation of the selected photo
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedPhoto);
-      reader.onloadend = () => {
-        setPhoto(reader.result);
+  const [photo, setPhoto] = useState(item?.image||"");
+  
+   const handlePhotoChange = (e) => {
+        const selectedPhoto = e.target.files[0];
+    setSelectedPhoto(e.target.files)
+        if (selectedPhoto) {
+          // Get the base64 representation of the selected photo
+          const reader = new FileReader();
+          reader.readAsDataURL(selectedPhoto);
+          reader.onloadend = () => {
+            setPhoto(reader.result);
+          };
+        }
       };
-    }
-  };
+
+      const defaultPhoto =
+    "https://via.placeholder.com/130?text=No+Image+Selected";
+
+
+    useEffect(()=>{
+      if(cakeData?.status){
+        navigate("/cakes")
+      }
+    },[cakeData,item])
 
   return (
-    <div className="bg-gray-800">
+    <div>
+        <div className="bg-gray-800">
       <div className=" flex justify-center">
         <h3 className="text-gray-600 text-2xl font-semibold sm:text-3xl">
-          Edit cake details
+          Update cake details
         </h3>
       </div>
       <div className="bg-white rounded-lg shadow p-4 py-6  sm:rounded-lg sm:max-w-5xl mt-8 mx-auto">
-        <form className="space-y-6 mx-8 sm:mx-2"  onSubmit={handleSubmit(onSubmit)}>
-          <div className="sm:flex justify-between">
-          <div>
-            <label className="font-medium">Name</label>
-            <input
+        <form className="space-y-6 mx-8 sm:mx-2" onSubmit={handleSubmit(onSubmit)}>
+        <div className="sm:flex space-y-6 sm:space-y-0 justify-between gap-10">
+          <div className="w-full">
+            <label className="font-medium">Cake Name</label>
+            <input 
+            {...register('name', )}
               type="text"
-              required
-              {...register("name", { defaultValue: selectedCake?.name })}
-              className="w-full mt-2 me-50 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+              
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
+           
           </div>
-          <div className="mt-4 sm:mt-0">
-            <label className="font-medium">Price</label>
-            <input
-              type="text"
-              required
-              {...register("price", { defaultValue: selectedCake?.price })}
-              className="w-full mt-2 me-50 px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
-            />
+          <div className="w-full">
+            <label className="font-medium">Is Eggless</label>
+            <Controller 
+                                      control={control}
+                                      name="isEggless"
+                                      render={({ field, fieldState:{error} }) => (
+                                          <Select
+                                              value={field.value}
+                                              options={[  { value: true, label: "True" },{ value: false, label: "False" },
+                                            ]}
+                                              onChange={(selectedOption) => field.onChange(selectedOption)}
+                                              className="mt-2 "
+                                              placeholder=" Choose Type "
+                                             defaultValue={[  { value: true, label: "True" },{ value: false, label: "False" },
+                                            ].find(c => c.value === item.isEggless)}
+                                              styles={{
+                                                  control: (provided) => ({
+                                                      ...provided,
+                                                      border: '1px solid #CBD5E1', // Set custom border style
+                                                      borderRadius: '0.400rem', // Set custom border radius
+                                                      height: '40px', // Add height here
+                                                  }),
+                                                  placeholder: (provided) => ({
+                                                      ...provided,
+                                                      color: '#9CA3AF', // Set custom placeholder color
+                                                  }),
+                                              }}
+ 
+                                          />
+                                     )}
+                                     
+                                      
+                                  />
+                                 
           </div>
+
             </div>
+
             <div>
           
-            <label htmlFor="file" className="font-medium space-y-6"> Photo 
-             
-            <img class="w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo} alt="Cake"/>
-        
+          <div className="font-medium space-y-6" > Photo 
            
-            <input
-            {...register("photo", { defaultValue: selectedCake?.photo })}
-            onChange={handlePhotoChange}
-             className="block w-54 sm:w-[443px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
-            </label>
-          
+          <img class="w-20 h:20 sm:w-35 sm:h-35 rounded" src={photo || defaultPhoto} alt="No Image"/>
+          <label htmlFor="file_input" className="flex
+            " ><InsertPhotoOutlinedIcon/>
+            <div className="w-full sm:w-[443px] px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
+         
+          <input
+           {...register('image')}
+           
+           className="hidden w-54 sm:w-[443px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
           </div>
+        
+        </div>
+
+            <div className="sm:flex space-y-6 sm:space-y-0 justify-between ">
+
+          
+            <label className="font-bold  text-black">Weight and Price</label>
+            <button
+        type="button"
+        className=" border rounded-md  bg-pink-700 text-white font-semibold text-xl px-2 hover:bg-slate-950"
+        onClick={() => appendPrice({ price: ""})}
+      >
+        +
+      </button>
+            </div>
+            <ul>
+        {priceFields.map((item, index) => (
+          <li key={item.id}>
+         
+<div className="sm:flex gap-10 ">
+<div className="w-full">
+
+            <input
+            {...register(`price.${index}.weight`, )}
+              type="text"
+              placeholder=" Weight "
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+  
+          </div>
+          <div className="w-full">
+          
+          <input
+            {...register(`price.${index}.price`)}
+              type="text"
+              placeholder=" Price "
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+  
+          </div>
+          </div>
+          { index>0 && (
+            <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() => removePrice(index)}>Delete</button>)
+}
+          </li>
+          
+        ))}
+      </ul>
+    
+            
+           
          
           <div style={{ marginTop: '4rem' }}>
               <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
-                Edit
+              {isLoading ? (
+                <ClipLoader color="#c4c2c2" />
+              ) : (<>Update</>)}
               </button>
             </div>
         </form>
       </div>
     </div>
-  );
-};
-
-export default UpdateCake;
+    </div>
+  )
+}

@@ -31,9 +31,9 @@ const bookingSlice = createSlice({
         state.isLoading = false;
         state.isDeleted = false;
         state.errorMessage = '';
-        console.log('API Response Payload:', action.payload);
+      
         state.bookingData = action.payload.data;
-        console.log('Reducer - Updated bookingData:', state.bookingData);
+     
       })
       .addCase(getAllBookings.rejected, (state, action) => {
         state.isLoading = false;

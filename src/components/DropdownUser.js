@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 
 
 import UserOne from '../images/user/user-01.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/actions/authenticationActions';
 
 const DropdownUser = () => {
+
+  const {loginData}= useSelector((state)=>state.auth)
+
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -54,7 +57,7 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {/* {loginData} */}
           </span>
           <span className="block text-xs">Admin</span>
         </span>

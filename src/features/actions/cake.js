@@ -22,6 +22,51 @@ export const getAllCakes = createAsyncThunk(
   }
 );
 
+//create cakes api
+export const createCake = createAsyncThunk(
+  'createCake',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await instance.post(
+        '/cake',
+        payload,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+//update cakes api
+export const updateCake = createAsyncThunk(
+  'updateCake',
+  async ({payload,id} ,{ rejectWithValue }) => {
+    try {
+      const response = await instance.patch(
+        `/cake/${id}`,
+        payload,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        }
+      );
+
+      return response;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
 //delete cake api
 export const deleteCake = createAsyncThunk(
   'deleteCake',
@@ -35,7 +80,7 @@ export const deleteCake = createAsyncThunk(
       );
       return response;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e.message);
     }
   }
 );

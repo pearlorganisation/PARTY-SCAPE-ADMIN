@@ -64,9 +64,9 @@ export default function ViewModalBooking({ setModal, viewData}) {
       <tr>
         <td className="py-2 px-4 border border-gray-300">Booked By</td>
         <td className="py-2 px-4 border border-gray-300">{viewData && viewData.bookedBy ? (
-            <p className='space-x-3'><span className='bg-slate-100 mb-2 rounded-md px-2 '>Max: {viewData.bookedBy.name}</span>
-            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Max Paid: {viewData.bookedBy.email}</span> 
-            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Extra Charges: {viewData.bookedBy.whatsappNumber}</span> </p>
+            <p className='space-x-3'><span className='bg-slate-100 mb-2 rounded-md px-2 '>Name : {viewData.bookedBy.name}</span>
+            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Email : {viewData.bookedBy.email}</span> 
+            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Phone Number : {viewData.bookedBy.whatsappNumber}</span> </p>
           ) : (
             'No Booked By details available'
           )}</td>
@@ -86,21 +86,23 @@ export default function ViewModalBooking({ setModal, viewData}) {
         <td className="py-2 px-4 border border-gray-300">{viewData.totalPeople}
         </td>
       </tr>
+    
       <tr>
-        <td className="py-2 px-4 border border-gray-300">Ceremony Type</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.ceremonyType.type}
-        </td>
-      </tr>
-      <tr>
-        <td className="py-2 px-4 border border-gray-300">Ceremony Label</td>
-        <td className="py-2 px-4 border border-gray-300"> {viewData && viewData.ceremonyTypeLabels ? (
+        <td className="py-2 px-4 border border-gray-300">Ceremony</td>
+      
+          
+        <td className="py-2 px-4 border border-gray-300"> 
+        <div>{viewData.ceremonyType.type}</div>
+          <div>
+        {viewData && viewData.ceremonyTypeLabels ? (
             viewData.ceremonyTypeLabels.map((item, idx) => (
-              <div className='border border-slate-300 mb-2 rounded-md px-2 py-2 space-x-2' key={idx}>Label {idx+1} :  <span className='bg-slate-100 mb-2 rounded-md px-2 '>Id: {item._id}</span>  <span className='bg-slate-100 mb-2 rounded-md px-2 '>Label: {item.label}</span>
-               <span className='bg-slate-100 mb-2 rounded-md px-2 '>Lable Name: {item.value}</span> </div>
+              <div className='border border-slate-300 mb-2 rounded-md px-2 py-2 space-x-2' key={idx}>
+               <span className='bg-slate-100 mb-2 rounded-md px-2 '>{item.label} : {item.value}</span> </div>
             ))
           ) : (
             'No Ceremony Label available'
           )}
+          </div>
         </td>
       </tr>
       <tr>

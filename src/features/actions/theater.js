@@ -42,6 +42,9 @@ export const updateTheater = createAsyncThunk(
     try {
       const response = await instance.patch(`/theater/${id}`, payload, {
         withCredentials: true,
+        headers: {
+          "Content-type": "multipart/form-data",
+        },
       });
       return response;
     } catch (e) {
@@ -62,7 +65,7 @@ export const createTheater = createAsyncThunk(
       });
       return response;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e.message);
     }
   }
 );

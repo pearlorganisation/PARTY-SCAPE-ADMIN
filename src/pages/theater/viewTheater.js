@@ -3,35 +3,36 @@
 import React, { useEffect, useState } from 'react';
 import Delete from '../../components/Delete';
 import { useSelector, useDispatch } from 'react-redux';
-import {useNavigate } from 'react-router';
-import { Stack,Skeleton } from '@mui/material';
+import { useNavigate } from 'react-router';
+import { Stack, Skeleton } from '@mui/material';
 import { deleteTheater, getAllTheaters } from '../../features/actions/theater';
-import ViewModalTheater from './ViewModalTheater'; 
-
+import ViewModalTheater from './ViewModalTheater';
 
 const ViewTheater = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { theaterData, isLoading } = useSelector((state) => state.theater);
+  const { theaterData, isLoading,isDeleted } = useSelector((state) => state.theater);
 
   useEffect(() => {
-    const fetchData = async()=>{
-      try{
-       
+    const fetchData = async () => {
+      try {
         dispatch(getAllTheaters());
+      } catch (error) {
+        console.error('Error fetching theaters:', error);
       }
-      catch(error){
-       console.error("Error fetching theaters:",error)
-      }
-    }
+    };
     fetchData();
   }, [dispatch]);
- 
+  useEffect(() => {
+ if(isDeleted){
+  dispatch(getAllTheaters())
+ }
+  }, [isDeleted]);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
-  const [viewData,setViewData]= useState()
+  const [viewData, setViewData] = useState();
 
   const [id, setId] = useState();
   const handleDelete = () => {
@@ -43,8 +44,8 @@ const ViewTheater = () => {
   const handleModal = (ID) => {
     setShowDeleteModal(true);
     setId(ID);
-  }; 
-  
+  };
+
   const handleViewModal = (item) => {
     setShowViewModal(true);
     setViewData(item);
@@ -52,7 +53,6 @@ const ViewTheater = () => {
   const handleAddTheater = () => {
     navigate('/createTheater');
   };
-
 
   return (
     <>
@@ -63,7 +63,8 @@ const ViewTheater = () => {
               Manage Theaters
             </h3>
             <p className="text-gray-600 mt-2">
-            This page is for handle Theater data by Create, View, Edit and Delete
+              This page is for handle Theater data by Create, View, Edit and
+              Delete
             </p>
           </div>
           <div className="mt-3 md:mt-0">
@@ -87,48 +88,47 @@ const ViewTheater = () => {
               </tr>
             </thead>
             <tbody className="text-gray-600 divide-y">
-            {isLoading ? (
-            <tr>
-            <td colSpan="6" className="text-center px-6 py-8">
-              <Stack spacing={4}>
-                <Skeleton variant="rounded" height={30} />
-                <Skeleton variant="rounded" height={25}/>
-                <Skeleton variant="rounded" height={20}/>
-                <Skeleton variant="rounded" height={20}/>
-                <Skeleton variant="rounded" height={20}/>
-              </Stack>
-            </td>
-          </tr>
-          ) : (
-                theaterData?.map((item, idx) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="6" className="text-center px-6 py-8">
+                    <Stack spacing={4}>
+                      <Skeleton variant="rounded" height={30} />
+                      <Skeleton variant="rounded" height={25} />
+                      <Skeleton variant="rounded" height={20} />
+                      <Skeleton variant="rounded" height={20} />
+                      <Skeleton variant="rounded" height={20} />
+                    </Stack>
+                  </td>
+                </tr>
+              ) : (
+                Array.isArray(theaterData) && theaterData?.map((item, idx) => (
                   <tr key={idx}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item?.theaterName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <img className='rounded-lg' src={`${item?.logo?.path}`} />
+                      <img className="rounded-lg" src={`${item?.logo?.path}`} />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.features[0].slice(0, 50)}...
+                    {item.features[0]?.slice(0,69)}...
                     </td>
                     <td className="text-right px-6 whitespace-nowrap">
                       <a
-                        onClick={()=>{handleViewModal(item)
+                        onClick={() => {
+                          handleViewModal(item);
                         }}
                         className="py-2 px-3 font-medium text-blue-500 hover:text-blue-600 duration-150 hover:bg-gray-50 rounded-lg cursor-pointer"
                       >
                         View
                       </a>
                       <a
-                        onClick={() => {
-                          handleModal(item?._id);
-                        }}
+                        onClick={()=>navigate(`/updateTheater/${item._id}`,{state:item})}
                         className="py-2 px-3 font-medium text-green-600 hover:text-green-500 duration-150 hover:bg-gray-50 rounded-lg cursor-pointer"
                       >
                         Edit
                       </a>
-                      <button 
+                      <button
                         onClick={() => {
                           handleModal(item?._id);
                         }}
@@ -139,7 +139,6 @@ const ViewTheater = () => {
                     </td>
                   </tr>
                 ))
-              
               )}
             </tbody>
           </table>
@@ -149,7 +148,7 @@ const ViewTheater = () => {
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />
       )}
       {showViewModal && (
-        <ViewModalTheater setModal={setShowViewModal}  viewData={viewData} />
+        <ViewModalTheater setModal={setShowViewModal} viewData={viewData} />
       )}
     </>
   );
