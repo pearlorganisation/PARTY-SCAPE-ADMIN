@@ -36,7 +36,7 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
 
 
       const onSubmit = data =>{
-        console.log('data',data)
+        // console.log('data',data)
         // const temp = data?.slots?.map(item => {
         //   const {startTime,startTimePeriod,endTimePeriod, endTime,totalPrice,...rest} = item
         //   return {
@@ -45,7 +45,70 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
         // })
         // console.log(temp)
 
+
+        // console.log(timeData)
+
+        const temp = data?.slots.map(item=>{
+          let [startHours,startMins]= item.start.split(":")
+          let startTime; 
+
+          if(startHours > 0 && startHours < 12) {
+            startTime = `${startHours}:${startMins} AM` 
+          } else if(startHours > 12 && startHours < 24) {
+            startTime = `${startHours - 12}:${startMins} PM`
+          }
+          else if(startHours === "00"){
+            startTime = `12:${startMins} AM`
+          }
+          else {
+            startTime = `${startHours}:${startMins} PM`
+          }
        
+          // console.log("start time converted::", startTime)
+
+          let [endHours,endMins]= item.end.split(":")
+          let endTime;
+
+          if(endHours > 0 && endHours < 12) {
+            endTime = `${endHours}:${endMins} AM` 
+          } else if(endHours > 12 && endHours < 24) {
+            endTime = `${endHours - 12}:${endMins} PM`
+          }
+          else if(endHours === "00"){
+            endTime = `12:${endMins} AM`
+          }
+          else {
+            endTime = `${endHours}:${endMins} PM`
+          }
+
+          const {start,end,...rest} = item
+ 
+          return {
+                ...rest,start: startTime,end: endTime
+              }
+
+        })
+        // let [startHours, startMins] = data?.slots[0].start.split(':')
+        
+        // let startTime; 
+
+        // console.log(startHours)
+
+        // if(startHours > 0 && startHours < 12) {
+        //   startTime = `${startHours}:${startMins} AM` 
+        // } else if(startHours > 12 && startHours < 24) {
+        //   startTime = `${startHours - 12}:${startMins} PM`
+        // }
+        // else if(startHours === "00"){
+        //   startTime = `12:${startMins} AM`
+        // }
+        // else {
+        //   startTime = `${startHours}:${startMins} PM`
+        // }
+        // console.log("start time converted::", startTime)
+
+        // return
+
         const {showCake} =data
         const showCakeValue = showCake.value
         const formData = new FormData()
@@ -54,7 +117,7 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
         formData.append("videoUrl",data?.videoUrl)
         formData.append("showCake",showCakeValue)
         formData.append("features",JSON.stringify(data?.features))
-        formData.append("slots",JSON.stringify(data?.slots))
+        formData.append("slots",JSON.stringify(temp))
         formData.append("occupancyDetails",JSON.stringify(data?.occupancyDetails))
         Array.from(data?.logo).forEach((img) => {
           formData.append("logo",img)
@@ -175,16 +238,12 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Location</label>
             <input
-            {...register('location', { required: 'Location is required' })}
+            {...register('location')}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
-           {errors && errors.location && (
-  <span className="text-red-500">
-    {errors.location.message}
-  </span>
-)}
+     
           </div>
             </div>
           

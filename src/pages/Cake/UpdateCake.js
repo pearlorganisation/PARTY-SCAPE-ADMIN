@@ -18,8 +18,9 @@ export const UpdateCake = () => {
 
   const {register,handleSubmit,formState: { errors },control}=useForm({
     defaultValues:{
-      name:item?.name || "",
-      price:[ {weight:item?.price?.weight||"", price:item?.price?.price||""},]
+      name:item?.name ,
+      price:item?.price,
+       isEggless:[  { value: true, label: "True" },{ value: false, label: "False" }].find(c => c.value === item.isEggless)
       
     }
   })
@@ -45,8 +46,7 @@ export const UpdateCake = () => {
           })
           console.log("formData",formData.getAll("isEggless"))
   dispatch(updateCake({payload:formData, id:item._id}))
-
-  }
+ }
 
 
  
@@ -73,7 +73,7 @@ export const UpdateCake = () => {
       if(cakeData?.status){
         navigate("/cakes")
       }
-    },[cakeData])
+    },[cakeData,item])
 
   return (
     <div>
@@ -89,16 +89,12 @@ export const UpdateCake = () => {
           <div className="w-full">
             <label className="font-medium">Cake Name</label>
             <input 
-            {...register('name', { required: 'Cake Name is required' })}
+            {...register('name', )}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
-            {errors && errors.name && (
-  <span className="text-red-500">
-    {errors.name.message}
-  </span>
-)}
+           
           </div>
           <div className="w-full">
             <label className="font-medium">Is Eggless</label>
@@ -114,7 +110,7 @@ export const UpdateCake = () => {
                                               className="mt-2 "
                                               placeholder=" Choose Type "
                                              defaultValue={[  { value: true, label: "True" },{ value: false, label: "False" },
-                                            ].find(c => c.value === item.value)}
+                                            ].find(c => c.value === item.isEggless)}
                                               styles={{
                                                   control: (provided) => ({
                                                       ...provided,
@@ -130,14 +126,10 @@ export const UpdateCake = () => {
  
                                           />
                                      )}
-                                      rules={{ required: true }}
+                                     
                                       
                                   />
-                                 {errors && errors.isEggless && (
-  <span className="text-red-500">
-    {errors.isEggless.message}
-  </span>
-)}
+                                 
           </div>
 
             </div>
@@ -152,7 +144,7 @@ export const UpdateCake = () => {
             <div className="w-full sm:w-[443px] px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
          
           <input
-           {...register('image', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
+           {...register('image')}
            
            className="hidden w-54 sm:w-[443px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
           </div>
@@ -179,7 +171,7 @@ export const UpdateCake = () => {
 <div className="w-full">
 
             <input
-            {...register(`price.${index}.weight`, { required: 'Weight is required' })}
+            {...register(`price.${index}.weight`, )}
               type="text"
               placeholder=" Weight "
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -189,7 +181,7 @@ export const UpdateCake = () => {
           <div className="w-full">
           
           <input
-            {...register(`price.${index}.price`, { required: 'Price is required' })}
+            {...register(`price.${index}.price`)}
               type="text"
               placeholder=" Price "
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -204,11 +196,7 @@ export const UpdateCake = () => {
           
         ))}
       </ul>
-      {errors.price && (
-            <span className="text-red-500">
-              Both Fields are required
-            </span>
-          )}
+    
             
            
          

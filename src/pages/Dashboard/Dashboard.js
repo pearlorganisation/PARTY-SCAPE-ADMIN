@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CardFour from "../../components/CardFour.js";
 import CardOne from "../../components/CardOne.js";
 import CardThree from "../../components/CardThree.js";
@@ -9,12 +9,23 @@ import ChartTwo from "../../components/ChartTwo.js";
 import ChatCard from "../../components/ChatCard.js";
 import MapOne from "../../components/MapOne.js";
 import TableOne from "../../components/TableOne.js";
+import { useEffect } from "react";
+import { getAllBookings } from "../../features/actions/booking.js";
+import { getAllTheaters } from "../../features/actions/theater.js";
+import { getAllCakes } from "../../features/actions/cake.js";
 // ----------------------------------------------------------------------
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
   const {theaterData} = useSelector((state)=>state.theater)
   const {bookingData} = useSelector((state)=>state.booking)
   const {cakeData} = useSelector((state)=>state.cake)
+useEffect(()=>{
+dispatch(getAllBookings())
+dispatch(getAllTheaters())
+dispatch(getAllCakes())
+},[dispatch])
+
 
   return (
     <>
@@ -22,9 +33,9 @@ const Dashboard = () => {
         
       
         
-        <CardOne data={bookingData.length}/>
-        <CardTwo data={theaterData.length}/>
-        <CardThree data={cakeData.length}/>
+        <CardOne data={bookingData?.length}/>
+        <CardTwo data={theaterData?.length}/>
+        <CardThree data={cakeData?.length}/>
         {/* <CardFour /> */}
       </div>
 

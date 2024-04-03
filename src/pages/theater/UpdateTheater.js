@@ -17,6 +17,28 @@ const UpdateTheater = () => {
   
   const {theaterData,isLoading} = useSelector((state)=>state.theater)
 
+ const temp = item?.slots?.map(item2 =>{
+    const [startHourMins, startAMPM] = item2?.start?.split(" ");
+    const [endHourMins, endAMPM] = item2?.end?.split(" ");
+
+    let [startHour, startMinutes] = startHourMins?.split(":");
+    let [endHour, endMinutes] = endHourMins?.split(":");
+    if (startAMPM === "PM" && startHour !== "12")
+    startHour = String(parseInt(startHour) + 12);
+  if (endAMPM === "PM" && endHour !== "12")
+    endHour = String(parseInt(endHour) + 12);
+
+    let startTime =`${startHour}:${startMinutes}`;
+    let endTime = `${endHour}:${endMinutes}`
+
+    const {start,end,...rest}=item2
+
+    return {...rest,start:startTime,end:endTime}
+
+  })
+  
+
+
     const {register,handleSubmit,control,formState: { errors },}=useForm({
       defaultValues:{
         theaterName: item?.theaterName || "",
@@ -24,11 +46,13 @@ const UpdateTheater = () => {
         videoUrl: item?.videoUrl || "",
         // showCake: { value: item?.showCake, label: item?.showCake ? "True" : "False" },
         features: item?.features || [],
-        slots: item?.slots || [{ start: "", end: "", theaterPrice: "", decorationPrice: "", offerPrice: "", price: "" }],
+        slots: temp ,
         occupancyDetails: item?.occupancyDetails || { max: "", maxPaid: "", extraCharges: "" },
+        showCake : [  { value: true, label: "True" },{ value: false, label: "False" }].find(c => c.value === item?.showCake)
         
       }
     })
+    console.log("temp::",temp)
 
       const { fields: featureFields, append: appendFeature, remove: removeFeature } = useFieldArray({
   control,
@@ -43,24 +67,17 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
 
       const onSubmit = data =>{
         console.log('data',data)
-        const temp = data?.slots?.map(item => {
-          const {startTime,startTimePeriod,endTimePeriod, endTime,...rest} = item
-          return {
-            ...rest,start: startTime+ ` ` + startTimePeriod,end: endTime+ ` ` + endTimePeriod
-          }
-        })
-        console.log(temp)
-
+      
        
         const {showCake} =data
-        const showCakeValue = showCake.value
+        const showCakeValue = showCake?.value
         const formData = new FormData()
         formData.append("theaterName",data?.theaterName)
         formData.append("location",data?.location)
         formData.append("videoUrl",data?.videoUrl)
         formData.append("showCake",showCakeValue)
         formData.append("features",JSON.stringify(data?.features))
-        formData.append("slots",JSON.stringify(temp))
+        formData.append("slots",JSON.stringify(data?.slots))
         formData.append("occupancyDetails",JSON.stringify(data?.occupancyDetails))
         Array.from(data?.logo).forEach((img) => {
           formData.append("logo",img)
@@ -73,13 +90,13 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
   // console.log("formdata", formData.getAll('showCake'));
   // console.log("formdata", formData.getAll('features'));
   // console.log("showcake::",showCakeValue)
-          dispatch(updateTheater({payload:formData,id:item._id}));
+          dispatch(updateTheater({payload:formData,id:item?._id}));
       }
 
       const [selectedPhoto,setSelectedPhoto]=useState("")
 const [selectedGallery,setSelectedGallery]=useState([])
 
-      const [photo, setPhoto] = useState(item?.logo.path || "");
+      const [photo, setPhoto] = useState(item?.logo?.path || "");
   const defaultPhoto =
     "https://via.placeholder.com/130?text=No+Image+Selected";
 
@@ -100,7 +117,7 @@ const [selectedGallery,setSelectedGallery]=useState([])
       const handleGalleryChange = (e) => {
         const selectedImages = e.target.files;
     
-        if (selectedImages.length > 0) {
+        if (selectedImages?.length > 0) {
           // Update an array to store file objects
           const imagesArray = [];
     
@@ -143,7 +160,7 @@ if (counter === imagesArray.length) {
       const removeImage = (index) => {
         setGallery((prevGallery) => {
           const updatedGallery = [...prevGallery];
-          updatedGallery.splice(index, 1);
+          updatedGallery?.splice(index, 1);
           return updatedGallery;
         });
       };
@@ -167,30 +184,22 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Theater Name</label>
             <input 
-            {...register('theaterName', { required: 'Theater Name is required' })}
+            {...register('theaterName')}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
-            {errors && errors.theaterName && (
-  <span className="text-red-500">
-    {errors.theaterName.message}
-  </span>
-)}
+           
           </div>
           <div className="w-full">
             <label className="font-medium">Location</label>
             <input
-            {...register('location', { required: 'Location is required' })}
+            {...register('location')}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
-           {errors && errors.location && (
-  <span className="text-red-500">
-    {errors.location.message}
-  </span>
-)}
+        
           </div>
             </div>
           
@@ -213,9 +222,11 @@ if (counter === imagesArray.length) {
                                       name="showCake"
                                       render={({ field, fieldState:{error} }) => (
                                           <Select
-                                              value={field.value}
+                                              value={field?.value}
                                               options={[  { value: true, label: "True" },{ value: false, label: "False" },
                                             ]}
+                                            defaultValue={[  { value: true, label: "True" },{ value: false, label: "False" },
+                                          ].find( (c) => c.value === item?.showCake)}
                                               onChange={(selectedOption) => field.onChange(selectedOption)}
                                               className="mt-2 "
                                               placeholder="Show Cake "
@@ -238,11 +249,7 @@ if (counter === imagesArray.length) {
                                       rules={{ required: true }}
                                       
                                   />
-                                 {errors && errors.showCake && (
-  <span className="text-red-500">
-    {errors.showCake.message}
-  </span>
-)}
+                              
                                  
           </div>
             
@@ -259,14 +266,10 @@ if (counter === imagesArray.length) {
             <div className="w-full px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
            
             <input
-             {...register('logo', { required: 'Photo is required',onChange:(e)=>{handlePhotoChange(e)} })}
+             {...register('logo', { onChange:(e)=>{handlePhotoChange(e)} })}
            
              className="hidden w-54 sm:w-[455px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
-              {errors.logo && (
-                    <span className="text-red-500">
-                      Photo is required
-                    </span>
-                  )}
+             
             </div>
            
             </div>
@@ -325,18 +328,14 @@ if (counter === imagesArray.length) {
         {featureFields.map((item, index) => (
           <li key={item.id}>
             <input className="w-full mt-2 px-5 sm:px-4 py-2 border-slate-300 text-gray-500 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg" type="text"
-             {...register(`features.${index}`,{required:"Features is Required"})}/>
+             {...register(`features.${index}`)}/>
             { index>0 && (
             <button className=" border rounded-md bg-rose-500 text-white text-xs px-2 hover:bg-slate-950" type="button" onClick={() =>removeFeature(index)}>Delete</button>)
 }
           </li>
         ))}
       </ul>
-      {errors.features && (
-                    <span className="text-red-500">
-                      Features is required
-                    </span>
-                  )}
+   
       
               </div>
            
@@ -360,7 +359,7 @@ if (counter === imagesArray.length) {
     <label className="font-medium">Start Time</label>
     <div className="flex items-center mt-2">
       <input 
-        {...register(`slots.${index}.start`,{ required: 'Start Time is required' })}
+        {...register(`slots.${index}.start`)}
         placeholder="0:00 Format"
         type="time"
         className="w-full px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -378,7 +377,7 @@ if (counter === imagesArray.length) {
     <label className="font-medium">End Time</label>
     <div className="flex items-center mt-2">
       <input 
-        {...register(`slots.${index}.end`,{ required: 'End Time is required' })}
+        {...register(`slots.${index}.end`)}
         placeholder="0:00 Format"
         type="time"
         
@@ -399,7 +398,7 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Theater Price</label>
             <input 
-             {...register(`slots.${index}.theaterPrice`,{ required: 'Theater Price is required' })}
+             {...register(`slots.${index}.theaterPrice`)}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -408,7 +407,7 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Decoration Price</label>
             <input
-            {...register(`slots.${index}.decorationPrice`,{ required: 'Decoration Price is required' })}
+            {...register(`slots.${index}.decorationPrice`)}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -420,7 +419,7 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Offer Price</label>
             <input 
-             {...register(`slots.${index}.offerPrice`,{ required: 'Offer Price is required' })}
+             {...register(`slots.${index}.offerPrice`)}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
@@ -429,7 +428,7 @@ if (counter === imagesArray.length) {
           <div className="w-full">
             <label className="font-medium">Total Price</label>
             <input
-            {...register(`slots.${index}.price`,{ required: 'Total Price is required' })}
+            {...register(`slots.${index}.price`)}
               type="text"
               
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"

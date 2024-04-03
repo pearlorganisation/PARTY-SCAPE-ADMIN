@@ -80,7 +80,7 @@ export const deleteCake = createAsyncThunk(
       );
       return response;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e.message);
     }
   }
 );
