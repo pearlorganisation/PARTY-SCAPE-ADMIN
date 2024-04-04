@@ -8,6 +8,8 @@ import theater from './slices/theater';
 import ceremonyType from './slices/ceremonyType';
 import cake from './slices/cake';
 import booking from './slices/booking';
+import prospectiveCustomer from './slices/prospectiveCustomer';
+
 
 // import
 
@@ -35,6 +37,8 @@ const reducer = combineReducers({
   cake,
   ceremonyType,
   booking,
+  prospectiveCustomer,
+
 
   // omitedPart: OmitReducer // not persisting this reducer
 });
@@ -54,7 +58,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  devTools: false,
+  devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,

@@ -5,12 +5,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import { Stack, Skeleton } from '@mui/material';
+import { deleteProspectiveCustomer, getAllProspectiveCustomers } from '../../features/actions/prospectiveCustomer';
 
 
 export const ProspectiveCustomers = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const {prospectiveCustomerData,isLoading,isDeleted}= useSelector((state)=>state.prospectiveCustomer)
   
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -19,7 +21,7 @@ export const ProspectiveCustomers = () => {
  
 
   const handleDelete = () => {
-    dispatch(deleteCake(id));
+    dispatch(deleteProspectiveCustomer(id));
     setShowDeleteModal(false);
     setId('');
   };
@@ -29,15 +31,15 @@ export const ProspectiveCustomers = () => {
     setId(ID);
   };
 
-//   useEffect(() => {
-//     dispatch(getAllCakes());
-//   }, []);
+  useEffect(() => {
+    dispatch(getAllProspectiveCustomers());
+  }, []);
 
-//   useEffect(() => {
-//     if (isDeleted) {
-//       dispatch(getAllCakes());
-//     }
-//   }, [isDeleted]);
+  useEffect(() => {
+    if (isDeleted) {
+      dispatch(getAllProspectiveCustomers());
+    }
+  }, [isDeleted]);
 
   return (
     <>
@@ -67,7 +69,7 @@ export const ProspectiveCustomers = () => {
             </thead>
             <tbody className="text-gray-600 divide-y">
               {
-              true ? 
+              isLoading ? 
               (
                 <tr>
                   <td colSpan="6" className="text-center px-6 py-8">
@@ -81,39 +83,23 @@ export const ProspectiveCustomers = () => {
                   </td>
                 </tr>
               ) : (
-                // Array.isArray(cakeData) &&
-                // cakeData.map((item, idx) => (
-                    // key={idx}
-                <tr >
+                Array.isArray(prospectiveCustomerData) &&
+                prospectiveCustomerData.map((item, idx) => (
+                  <tr 
+                  key={idx}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item?.name}
                     </td>
                     <td className="px-5 py-3">
-                      <img
-                        src={item?.image}
-                        className="w-10 h-10 rounded-full"
-                      />
+                     {item?.email}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {Array.isArray(item?.price) &&
-                        item.price.map((item2, idx) => (
-                          <div className="flex border justify-between border-slate-300 rounded-lg p-2 gap-2">
-                            <div>Weight: {item2?.weight}</div>
-                            <div>Price: {item2?.price}</div>
-                          </div>
-                        ))}
+                      {item?.number}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.isEggless ? 'True' : 'False'}
-                    </td>
+                   
                     <td className="flex px-6 py-4 space-x-5 items-center">
-                      <a
-                        onClick={()=>navigate(`/updateCake/${item.id}`,{state:item})}
-                        className="py-2 text-green-600 font-medium"
-                      >
-                        Edit
-                      </a>
+                      
                       <a
                         onClick={() => {
                           handleModal(item?._id);
@@ -124,7 +110,7 @@ export const ProspectiveCustomers = () => {
                       </a>
                     </td>
                   </tr>
-                // ))
+                ))
               )}
             </tbody>
           </table>

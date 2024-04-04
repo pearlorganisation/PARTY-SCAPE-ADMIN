@@ -32,16 +32,17 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
-        <Route path="/" element={<DefaultLayout />}>
-          {/* Non Protected Routes  */}
-          <Route
+           {/* Non Protected Routes  */}
+           <Route
             path="/auth/signin"
             element={isUserLoggedIn ? <Navigate to="/" /> : <SignIn />}
           />
-          <Route
+          {/* <Route
             path="/auth/signup"
             element={isUserLoggedIn ? <Navigate to="/" /> : <SignUp />}
-          />
+          /> */}
+        <Route path="/" element={<DefaultLayout />}>
+       
           <Route path="*" element={<PageNotFound />} />
 
           {/*  Protected Routes  */}

@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-
-import UserOne from '../images/user/user-01.png';
+import { ClipLoader } from "react-spinners";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/actions/authenticationActions';
 
 const DropdownUser = () => {
 
-  const {loginData}= useSelector((state)=>state.auth)
+  const {isLoading}= useSelector((state)=>state.auth)
 
   const dispatch = useDispatch();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -115,7 +113,9 @@ const DropdownUser = () => {
               fill=""
             />
           </svg>
-          Log Out
+          {isLoading ? (
+                  <ClipLoader color="#c4c2c2" />
+                ) : (<> Log Out </>)}
         </button>
       </div>
       {/* <!-- Dropdown End --> */}
