@@ -79,6 +79,7 @@ const { fields: slotFields, append: appendSlot, remove: removeSlot } = useFieldA
         formData.append("features",JSON.stringify(data?.features))
         formData.append("slots",JSON.stringify(data?.slots))
         formData.append("occupancyDetails",JSON.stringify(data?.occupancyDetails))
+        
         Array.from(data?.logo).forEach((img) => {
           formData.append("logo",img)
           })

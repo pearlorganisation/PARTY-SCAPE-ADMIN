@@ -24,6 +24,7 @@ const initialState = {
   isPasswordReset: false,
   isMailSent: false,
   userData :[],
+  
   loginData :[],
 };
 

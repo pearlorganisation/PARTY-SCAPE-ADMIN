@@ -131,7 +131,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                 <TheatersOutlinedIcon/>
+                 <CelebrationOutlinedIcon/>
                   Manage Theaters
                 </NavLink>
               </li>
@@ -144,7 +144,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                 <GridViewOutlinedIcon/>
+                 <CakeOutlinedIcon/>
                   Manage Cakes
                 </NavLink>
               </li>
@@ -156,7 +156,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     'bg-graydark dark:bg-meta-4'
                   }`}
                 >
-                 <GridViewOutlinedIcon/>
+                 <AdminPanelSettingsOutlinedIcon/>
                   Manage Prospective Customers
                 </NavLink>
               </li>
