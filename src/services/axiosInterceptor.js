@@ -10,7 +10,7 @@ console.log(process.env.REACT_APP_API_BASE_URL_MAIN_PRODUCTION,"process.env.REAC
 export const instance = axios.create({
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
-  baseURL: 'https://party-scape-backend.onrender.com/api/v1',
+  baseURL: 'https://booking.partyscape.in/api/v1',
 });
 
 instance.interceptors.request.use(
