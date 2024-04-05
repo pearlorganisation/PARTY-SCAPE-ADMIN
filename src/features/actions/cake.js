@@ -17,7 +17,7 @@ export const getAllCakes = createAsyncThunk(
 
       return data;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e.message);
     }
   }
 );
@@ -40,7 +40,7 @@ export const createCake = createAsyncThunk(
 
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -62,7 +62,7 @@ export const updateCake = createAsyncThunk(
 
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -80,7 +80,7 @@ export const deleteCake = createAsyncThunk(
       );
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );

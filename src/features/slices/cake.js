@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import toast from 'react-toastify';
+
 import { createCake, deleteCake, getAllCakes, updateCake } from '../actions/cake';
+import toast from 'react-hot-toast';
 
 const initialState = {
   isLoading: false,
@@ -41,11 +42,17 @@ const cakeSlice = createSlice({
         state.isSuccess=false
         
         state.cakeData = action.payload.data;
+        toast.success("Create Cake Successfully",{
+          position:"top-center"
+        })
       })
       .addCase(createCake.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess=false
-        state.errorMessage = action.payload;
+        state.errorMessage =  action.payload || 'An error occurred while updating the theater.';
+        toast.error(state?.errorMessage, {
+          position: "top-center",
+        });
       })
       .addCase(updateCake.pending, (state, action) => {
         state.isLoading = true;
@@ -56,11 +63,18 @@ const cakeSlice = createSlice({
         state.isSuccess=false
         
         state.cakeData = action.payload.data;
+        toast.success("Updated Cake Successfully",{
+          position:"top-center"
+        })
+
       })
       .addCase(updateCake.rejected, (state, action) => {
         state.isLoading = false;
         state.isSuccess=false
-        state.errorMessage = action.payload;
+        state.errorMessage =  action.payload || 'An error occurred while updating the theater.';
+        toast.error(state?.errorMessage, {
+          position: "top-center",
+        });
       })
       .addCase(deleteCake.pending, (state, action) => {
         state.isLoading = true;
@@ -69,14 +83,22 @@ const cakeSlice = createSlice({
       .addCase(deleteCake.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isDeleted=true;
+        toast.success("Deleted Cake Successfully",{
+          position:"top-center"
+        })
       })
       .addCase(deleteCake.rejected, (state, action) => {
         state.isLoading = false;
-        state.errorMessage = action.payload;
+        
         state.isDeleted=false;
         state.cakeData = state.cakeData.filter(
           (cake) => cake._id !== action?.payload?.payload
         );
+        state.errorMessage =  action.payload || 'An error occurred while updating the theater.';
+        toast.error(state?.errorMessage, {
+          position: "top-center",
+        });
+
       });
   },
 });

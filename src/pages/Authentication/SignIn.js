@@ -260,7 +260,7 @@ const SignIn = () => {
 
                 <div className="mt-5">
                 <button
-                  
+                  disabled={isLoading}
                   className="inline-flex w-full items-center justify-center rounded-md bg-[#1D4ED8] px-3.5 py-2.5 font-semibold leading-7 text-white"
                 >{isLoading ? (
                   <ClipLoader color="#c4c2c2" />

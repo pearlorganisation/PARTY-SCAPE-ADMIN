@@ -1,23 +1,19 @@
 import { lazy } from 'react';
 import ViewTheater from '../pages/theater/viewTheater';
 import {ViewCake} from '../pages/Cake/ViewCake';
-
 import { CreateCake } from '../pages/Cake/CreateCake';
 import {UpdateCeremony} from '../pages/Ceremony/UpdateCeremony';
 import { ViewCeremony } from '../pages/Ceremony/ViewCeremony';
 import { CreateCeremony } from '../pages/Ceremony/CreateCeremony';
 import CreateTheater from '../pages/theater/CreateTheater';
 import UpdateTheater from '../pages/theater/UpdateTheater';
-import SignIn from '../pages/Authentication/SignIn';
-import SignUp from '../pages/Authentication/SignUp';
 import ViewBooking from '../pages/Booking/ViewBooking';
 import CreateBooking from '../pages/Booking/CreateBooking';
 import { UpdateCake } from '../pages/Cake/UpdateCake';
 import { ProspectiveCustomers } from '../pages/ProspectiveCustomer/ProspectiveCustomers';
 
 
-const Profile = lazy(() => import('../pages/Profile'));
-const Settings = lazy(() => import('../pages/Settings'));
+
 
 
 
@@ -32,21 +28,6 @@ const ViewUsers = lazy(() => import('../pages/Authentication/users/ViewUsers'));
 
 // ------------------------------------------------------------------------------
 const coreRoutes = [
-
-  {
-    path: '/profile',
-    title: 'Profile',
-    component: Profile,
-  },
-  // {
- 
-  {
-    path: '/settings',
-    title: 'Settings',
-    component: Settings,
-  },
- 
-  // ------------------------------------------------------------------------------
 
   // New Routes
   // Users Routes
@@ -123,7 +104,7 @@ const coreRoutes = [
  //
  {
   path: '/prospectiveCustomer',
-  title: 'view prospectiveCustomers',
+  title: 'view prospective customers',
   component: ProspectiveCustomers,
 },
 

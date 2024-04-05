@@ -13,7 +13,7 @@ export const getAllTheaters = createAsyncThunk(
       console.log(data, 'datatattatatatat');
       return data;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -31,7 +31,7 @@ export const deleteTheater = createAsyncThunk(
       );
       return response;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -48,7 +48,8 @@ export const updateTheater = createAsyncThunk(
       });
       return response;
     } catch (e) {
-      return rejectWithValue;
+      console.log(e)
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -65,7 +66,7 @@ export const createTheater = createAsyncThunk(
       });
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );

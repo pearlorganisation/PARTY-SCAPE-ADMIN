@@ -144,7 +144,7 @@ export const UpdateCake = () => {
             <div className="w-full sm:w-[443px] px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
          
           <input
-           {...register('image')}
+           {...register('image',{onChange:(e)=>{handlePhotoChange(e)}})}
            
            className="hidden w-54 sm:w-[443px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
           </div>
@@ -201,7 +201,8 @@ export const UpdateCake = () => {
            
          
           <div style={{ marginTop: '4rem' }}>
-              <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
+              <button
+               disabled={isLoading} className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
               {isLoading ? (
                 <ClipLoader color="#c4c2c2" />
               ) : (<>Update</>)}

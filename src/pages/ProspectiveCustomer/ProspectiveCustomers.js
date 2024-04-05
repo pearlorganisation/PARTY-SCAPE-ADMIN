@@ -83,8 +83,8 @@ export const ProspectiveCustomers = () => {
                   </td>
                 </tr>
               ) : (
-                Array.isArray(prospectiveCustomerData) &&
-                prospectiveCustomerData.map((item, idx) => (
+                Array?.isArray(prospectiveCustomerData) &&
+                prospectiveCustomerData?.map((item, idx) => (
                   <tr 
                   key={idx}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>

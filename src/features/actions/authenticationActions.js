@@ -3,61 +3,7 @@ import { instance } from "../../services/axiosInterceptor";
 
 // ------------------------------------Async Actions----------------------------------
 
-//Signup send OTP and verify Otp Api bith in single Api
-export const generateSignupOTP = createAsyncThunk(
-  "auth/sendOtpForSignUp",
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await instance.post("mail/generateSignUpOtp", payload, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
 
-//Signup Api
-export const signUp = createAsyncThunk(
-  "user/signup",
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await instance.post("auth/signup", payload, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("Fetch signUp data:::", response);
-      return response;
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error);
-    }
-  }
-);
-
-//Login send OTP Api and verify OTP Api both work in one Api
-export const generateLoginOTP = createAsyncThunk(
-  "auth/sendOtpForLogin",
-  async (payload, { rejectWithValue }) => {
-    try {
-      const response = await instance.post("/mail/generateLoginOtp", payload, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response?.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
 
 //Login Api
 export const logIn = createAsyncThunk(
@@ -72,7 +18,7 @@ export const logIn = createAsyncThunk(
       return data;
     } catch (error) {
       console.log(error);
-      return rejectWithValue(error);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -90,7 +36,7 @@ export const logout = createAsyncThunk(
       });
       return response?.data;
     } catch (error) {
-      return rejectWithValue(error);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );

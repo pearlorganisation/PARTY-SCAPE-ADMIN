@@ -28,7 +28,7 @@ export const deleteProspectiveCustomer = createAsyncThunk(
         );
         return response;
       } catch (e) {
-        return rejectWithValue(e.message);
+        return rejectWithValue(e?.response?.data?.message);
       }
     }
   );
