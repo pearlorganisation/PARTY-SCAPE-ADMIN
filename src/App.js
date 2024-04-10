@@ -13,8 +13,8 @@ import PageNotFound from './pages/PageNotFound';
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
 function App() {
-  let { isUserLoggedIn } = useSelector((state) => state.auth);
-//  const isUserLoggedIn =true
+  // let { isUserLoggedIn } = useSelector((state) => state.auth);
+ const isUserLoggedIn =true
   console.log(isUserLoggedIn, 'isUserLoggedIn');
   const [loading, setLoading] = useState(true);
   

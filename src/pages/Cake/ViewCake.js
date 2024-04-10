@@ -43,15 +43,14 @@ export const ViewCake = () => {
 
   return (
     <>
-      <div className="max-w-screen-xl mx-auto px-4 md:px-8">
+      <div className="max-w-screen-xl ">
         <div className="items-start justify-between md:flex">
           <div className="max-w-lg">
             <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
               Manage cakes
             </h3>
             <p className="text-gray-600 mt-2">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry.
+            This page is for handle cakes by Create, Update and Delete
             </p>
           </div>
           <div className="mt-3 md:mt-0">
@@ -71,7 +70,7 @@ export const ViewCake = () => {
                 <th className="py-3 px-6">Cake Name</th>
                 <th className="py-3 px-6">Logo</th>
                 <th className="py-3 px-6">Weight & Price</th>
-                <th className="py-3 px-6">Eggless</th>
+               
                 <th className="py-3 px-6">Actions</th>
               </tr>
             </thead>
@@ -107,13 +106,12 @@ export const ViewCake = () => {
                         item.price.map((item2, idx) => (
                           <div className="flex border justify-between border-slate-300 rounded-lg p-2 gap-2">
                             <div>Weight: {item2?.weight}</div>
-                            <div>Price: {item2?.price}</div>
+                            <div>Regular Price: {item2?.price}</div>
+                            <div>Eggless Price: {item2?.egglessPrice}</div>
                           </div>
                         ))}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.isEggless ? 'True' : 'False'}
-                    </td>
+                  
                     <td className="flex px-6 py-4 space-x-5 items-center">
                       <a
                         onClick={()=>navigate(`/updateCake/${item._id}`,{state:item})}

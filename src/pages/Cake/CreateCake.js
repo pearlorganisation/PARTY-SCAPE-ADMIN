@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm ,Controller,useFieldArray} from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
+
 import { createCake } from "../../features/actions/cake";
 import { ClipLoader } from "react-spinners";
 import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
@@ -18,7 +18,7 @@ export const CreateCake = () => {
   const {register,handleSubmit,formState: { errors },control}=useForm({
     defaultValues:{
       name:"",
-      price:[ {weight:"", price:""},]
+      price:[ {weight:"", price:"", egglessPrice:""},]
       
     }
   })
@@ -32,20 +32,20 @@ export const CreateCake = () => {
   const onSubmit = data =>{
     console.log('data',data)
 
-    const {isEggless}= data
-   const isEgglessValue= isEggless.value;
+  //   const {isEggless}= data
+  //  const isEgglessValue= isEggless.value;
 
   
 
 
    const formData = new FormData();
    formData.append("name",data?.name)
-   formData.append("isEggless",isEgglessValue)
+  //  formData.append("isEggless",isEgglessValue)
    formData.append("price",JSON.stringify(data?.price))
     Array.from(data?.image).forEach((img) => {
           formData.append("image",img)
           })
-          console.log("formData",formData.getAll("isEggless"))
+         
   dispatch(createCake(formData))
 
   }
@@ -102,7 +102,7 @@ export const CreateCake = () => {
   </span>
 )}
           </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <label className="font-medium">Is Eggless</label>
             <Controller 
                                       control={control}
@@ -139,7 +139,7 @@ export const CreateCake = () => {
     {errors.isEggless.message}
   </span>
 )}
-          </div>
+          </div> */}
 
             </div>
 
@@ -163,7 +163,7 @@ export const CreateCake = () => {
             <div className="sm:flex space-y-6 sm:space-y-0 justify-between ">
 
           
-            <label className="font-bold  text-black">Weight and Price</label>
+            <label className="font-bold  text-black">Weight and Price <span className="font-normal">(Regular and Eggless)</span></label>
             <button
         type="button"
         className=" border rounded-md  bg-pink-700 text-white font-semibold text-xl px-2 hover:bg-slate-950"
@@ -192,7 +192,17 @@ export const CreateCake = () => {
           <input
             {...register(`price.${index}.price`, { required: 'Price is required' })}
               type="text"
-              placeholder=" Price "
+              placeholder=" Regular Price "
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+  
+          </div>
+          <div className="w-full">
+          
+          <input
+            {...register(`price.${index}.egglessPrice`, { required: 'Eggless Price is required' })}
+              type="text"
+              placeholder=" Eggless Price "
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
   
