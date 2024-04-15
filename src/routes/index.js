@@ -11,6 +11,7 @@ import ViewBooking from '../pages/Booking/ViewBooking';
 import CreateBooking from '../pages/Booking/CreateBooking';
 import { UpdateCake } from '../pages/Cake/UpdateCake';
 import { ProspectiveCustomers } from '../pages/ProspectiveCustomer/ProspectiveCustomers';
+import ViewBookingStatus from '../pages/BookingStatus/ViewBookingStatus';
 
 
 
@@ -101,12 +102,19 @@ const coreRoutes = [
     title: 'create ceremony',
     component: CreateCeremony,
   },
- //
+ // prospective customers
  {
   path: '/prospectiveCustomer',
   title: 'view prospective customers',
   component: ProspectiveCustomers,
 },
+// Booking status
+{
+  path: '/bookingStatus',
+  title: 'view booking status',
+  component: ViewBookingStatus,
+},
+
 
 
 ];

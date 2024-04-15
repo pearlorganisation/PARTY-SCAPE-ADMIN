@@ -27,7 +27,7 @@ export default function ViewModalBooking({ setModal, viewData}) {
         <h3 className="flex-1 text-xl font-medium text-slate-700">
           View Booking Details
         </h3>
-        <div>Created On : {formattedDate} </div>
+       
         <button
           onClick={() => setModal(false)}
           className="inline-flex h-10 items-center justify-center gap-2 justify-self-center whitespace-nowrap rounded-full px-5 text-sm font-medium tracking-wide text-emerald-500 transition duration-300 hover:bg-emerald-100 hover:text-emerald-600 focus:bg-emerald-200 focus:text-emerald-700 focus-visible:outline-none disabled:cursor-not-allowed disabled:text-emerald-300 disabled:shadow-none disabled:hover:bg-transparent"
@@ -63,27 +63,31 @@ export default function ViewModalBooking({ setModal, viewData}) {
     <tbody className="text-gray-600">
       <tr>
         <td className="py-2 px-4 border border-gray-300">Booked By</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData && viewData.bookedBy ? (
-            <p className='space-x-3'><span className='bg-slate-100 mb-2 rounded-md px-2 '>Name : {viewData.bookedBy.name}</span>
-            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Email : {viewData.bookedBy.email}</span> 
-            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Phone Number : {viewData.bookedBy.whatsappNumber}</span> </p>
+        <td className="py-2 px-4 border border-gray-300">{viewData && viewData?.bookedBy ? (
+            <p className='space-x-3'><span className='bg-slate-100 mb-2 rounded-md px-2 '>Name : {viewData?.bookedBy?.name}</span>
+            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Email : {viewData?.bookedBy?.email}</span> 
+            <span className='bg-slate-100 mb-2 rounded-md px-2 '>Phone Number : {viewData?.bookedBy?.whatsappNumber}</span> </p>
           ) : (
             'No Booked By details available'
           )}</td>
       </tr>
       <tr>
-        <td className="py-2 px-4 border border-gray-300">Booked Date</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.bookedDate}
+        <td className="py-2 px-4 border border-gray-300">Booked On</td>
+        <td className="py-2 px-4 border border-gray-300">{formattedDate}</td>
+      </tr>
+      <tr>
+        <td className="py-2 px-4 border border-gray-300">Event Date</td>
+        <td className="py-2 px-4 border border-gray-300">{viewData?.bookedDate}
         </td>
       </tr>
       <tr>
         <td className="py-2 px-4 border border-gray-300">Booked Slot</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.bookedSlot}
+        <td className="py-2 px-4 border border-gray-300">{viewData?.bookedSlot}
         </td>
       </tr>
       <tr>
         <td className="py-2 px-4 border border-gray-300">Total People</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.totalPeople}
+        <td className="py-2 px-4 border border-gray-300">{viewData?.totalPeople}
         </td>
       </tr>
     
@@ -92,12 +96,12 @@ export default function ViewModalBooking({ setModal, viewData}) {
       
           
         <td className="py-2 px-4 border border-gray-300"> 
-        <div>{viewData.ceremonyType.type}</div>
+        <div>{viewData?.ceremonyType?.type}</div>
           <div>
-        {viewData && viewData.ceremonyTypeLabels ? (
-            viewData.ceremonyTypeLabels.map((item, idx) => (
+        {viewData && viewData?.ceremonyTypeLabels ? (
+            viewData?.ceremonyTypeLabels?.map((item, idx) => (
               <div className='border border-slate-300 mb-2 rounded-md px-2 py-2 space-x-2' key={idx}>
-               <span className='bg-slate-100 mb-2 rounded-md px-2 '>{item.label} : {item.value}</span> </div>
+               <span className='bg-slate-100 mb-2 rounded-md px-2 '>{item?.label} : {item?.value}</span> </div>
             ))
           ) : (
             'No Ceremony Label available'
@@ -107,21 +111,21 @@ export default function ViewModalBooking({ setModal, viewData}) {
       </tr>
       <tr>
         <td className="py-2 px-4 border border-gray-300">Theater</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.theater.theaterName}
+        <td className="py-2 px-4 border border-gray-300">{viewData?.theater?.theaterName}
         </td>
       </tr>
   
       <tr>
         <td className="py-2 px-4 border border-gray-300">Add Ons</td>
         <td className="py-2 px-4 border border-gray-300">
-          {viewData && viewData.addOns ? (
+          {viewData && viewData?.addOns ? (
             viewData.addOns.map((item, idx) => (
                 
               <div className='border border-slate-300 mb-2 rounded-md px-2 flex gap-2' key={idx}>
                 <div className='flex items-center'>Add On {idx+1} : </div>
                  <div className='p-3 space-x-2'> 
-                <div className='flex mb-2 p-3'>  <img src={item.img} alt={` Image ${idx}`} className="rounded-lg h-30 w-50 mb-2" /> </div>
-                <span className='bg-slate-100 mb-2 rounded-md px-2 '>Id: {item._id}</span>  <span className='bg-slate-100 mb-2 rounded-md px-2 '>Title: {item.title}</span>  <span className='bg-slate-100 mb-2 rounded-md px-2 '>Price: {item.price}</span> 
+                
+                <span className='bg-slate-100 mb-2 rounded-md px-2 '>Title : {item?.title}</span>  <span className='bg-slate-100 mb-2 rounded-md px-2 '>Price : {item?.price}</span> 
                 </div>  
                 </div>
             ))
@@ -132,18 +136,18 @@ export default function ViewModalBooking({ setModal, viewData}) {
       </tr>
       <tr>
         <td className="py-2 px-4 border border-gray-300">Price Due</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.remainingPrice}
+        <td className="py-2 px-4 border border-gray-300">{viewData?.remainingPrice}
         </td>
       </tr>
       <tr>
         <td className="py-2 px-4 border border-gray-300">RazorPay Order Id</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.
+        <td className="py-2 px-4 border border-gray-300">{viewData?.
 razorpay_order_id}
         </td>
       </tr>
       <tr>
         <td className="py-2 px-4 border border-b-2 border-gray-300">RazorPay Payment Id</td>
-        <td className="py-2 px-4 border border-gray-300">{viewData.razorpay_payment_id}
+        <td className="py-2 px-4 border border-gray-300">{viewData?.razorpay_payment_id}
         </td>
       </tr>
      

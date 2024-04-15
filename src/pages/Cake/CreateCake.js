@@ -102,44 +102,7 @@ export const CreateCake = () => {
   </span>
 )}
           </div>
-          {/* <div className="w-full">
-            <label className="font-medium">Is Eggless</label>
-            <Controller 
-                                      control={control}
-                                      name="isEggless"
-                                      render={({ field, fieldState:{error} }) => (
-                                          <Select
-                                              value={field.value}
-                                              options={[  { value: true, label: "True" },{ value: false, label: "False" },
-                                            ]}
-                                              onChange={(selectedOption) => field.onChange(selectedOption)}
-                                              className="mt-2 "
-                                              placeholder=" Choose Type "
-                                             
-                                              styles={{
-                                                  control: (provided) => ({
-                                                      ...provided,
-                                                      border: '1px solid #CBD5E1', // Set custom border style
-                                                      borderRadius: '0.400rem', // Set custom border radius
-                                                      height: '40px', // Add height here
-                                                  }),
-                                                  placeholder: (provided) => ({
-                                                      ...provided,
-                                                      color: '#9CA3AF', // Set custom placeholder color
-                                                  }),
-                                              }}
- 
-                                          />
-                                     )}
-                                      rules={{ required: true }}
-                                      
-                                  />
-                                 {errors && errors.isEggless && (
-  <span className="text-red-500">
-    {errors.isEggless.message}
-  </span>
-)}
-          </div> */}
+         
 
             </div>
 

@@ -171,6 +171,8 @@ if (counter === imagesArray.length) {
           navigate("/theaters")
         }
       },[theaterData])
+
+      
   return (
     <div>
         <div className="bg-gray-800">
