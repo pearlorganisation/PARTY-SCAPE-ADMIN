@@ -17,10 +17,10 @@ const ViewBookingStatus = () => {
       <div className="items-start justify-between md:flex">
         <div className="max-w-lg">
           <h3 className="text-gray-800 text-xl font-bold sm:text-2xl">
-            Manage Bookings
+            Booking Status
           </h3>
           <p className="text-gray-600 mt-2">
-            This page is for handle bookings by Create, View and Delete
+            This page is for View the Available and Unavailable Slots in Theater
           </p>
         </div>
        
