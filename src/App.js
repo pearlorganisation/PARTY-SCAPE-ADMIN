@@ -14,10 +14,10 @@ const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
 function App() {
   let { isUserLoggedIn } = useSelector((state) => state.auth);
-//  const isUserLoggedIn =true
-  console.log(isUserLoggedIn, 'isUserLoggedIn');
+  // const isUserLoggedIn = true;
+
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
@@ -32,17 +32,18 @@ function App() {
         containerClassName="overflow-auto"
       />
       <Routes>
-           {/* Non Protected Routes  */}
-           <Route
-            path="/auth/signin"
-            element={isUserLoggedIn ? <Navigate to="/" /> : <SignIn />}
-          />
-          {/* <Route
-            path="/auth/signup"
-            element={isUserLoggedIn ? <Navigate to="/" /> : <SignUp />}
-          /> */}
+        {/* Non Protected Routes  */}
+        <Route
+          path="/auth/signin"
+          element={isUserLoggedIn ? <Navigate to="/" /> : <SignIn />}
+        />
+
+        <Route
+          path="/auth/signup"
+          element={isUserLoggedIn ? <Navigate to="/" /> : <SignUp />}
+        />
+
         <Route path="/" element={<DefaultLayout />}>
-       
           <Route path="*" element={<PageNotFound />} />
 
           {/*  Protected Routes  */}

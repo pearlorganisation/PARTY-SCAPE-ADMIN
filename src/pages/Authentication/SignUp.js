@@ -1,22 +1,19 @@
 import { Link } from 'react-router-dom';
 import LogoDark from '../../images/logo/logo-dark.svg';
 import Logo from '../../images/logo/logo.svg';
-import { useDispatch,useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import {signUp} from "../../features/actions/authenticationActions"
-import { ClipLoader } from "react-spinners";
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { ClipLoader } from 'react-spinners';
 import { useState } from 'react';
 
 const SignUp = () => {
-
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {userData, isLoading} = useSelector((state)=>state.auth)
+  const { userData, isLoading } = useSelector((state) => state.auth);
 
- 
-  const [isPasswordHidden, setPasswordHidden] = useState(true)
+  const [isPasswordHidden, setPasswordHidden] = useState(true);
 
   const togglePasswordVisibility = () => {
     setPasswordHidden(!isPasswordHidden);
@@ -26,29 +23,27 @@ const SignUp = () => {
     }
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const {register,handleSubmit,formState: { errors },} =useForm()
+  const onSubmit = (data) => {
+    // dispatch(signUp(data));
 
-  const onSubmit = data=>{
-
-    dispatch(signUp(data))
-
-    if(userData?.status){
-
-      navigate('/auth/signin')
+    if (userData?.status) {
+      navigate('/auth/signin');
     }
-  }
-  
+  };
+
   return (
     <>
       <div className="rounded-lg border h-screen border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
-              
-              <p className="text-2xl">
-              Welcome to the Party Scape Admin Panel
-              </p>
+              <p className="text-2xl">Welcome to the Party Scape Admin Panel</p>
 
               <span className="mt-15 inline-block">
                 <svg
@@ -177,7 +172,6 @@ const SignUp = () => {
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-             
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Sign Up to Party Scape Admin Panel
               </h2>
@@ -185,11 +179,13 @@ const SignUp = () => {
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                   Name
+                    Name
                   </label>
                   <div className="relative">
                     <input
-                    {...register("name",{required: "Fullname is required"})}
+                      {...register('name', {
+                        required: 'Fullname is required',
+                      })}
                       type="text"
                       placeholder="Enter your full name"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -218,9 +214,7 @@ const SignUp = () => {
                     </span>
                   </div>
                   {errors?.name && (
-                    <span className="text-red-500">
-                      Name is required
-                    </span>
+                    <span className="text-red-500">Name is required</span>
                   )}
                 </div>
 
@@ -230,7 +224,7 @@ const SignUp = () => {
                   </label>
                   <div className="relative">
                     <input
-                    {...register("email",{required:'Email is required'})}
+                      {...register('email', { required: 'Email is required' })}
                       type="email"
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -255,9 +249,7 @@ const SignUp = () => {
                     </span>
                   </div>
                   {errors?.email && (
-                    <span className="text-red-500">
-                      Email is required
-                    </span>
+                    <span className="text-red-500">Email is required</span>
                   )}
                 </div>
 
@@ -267,54 +259,71 @@ const SignUp = () => {
                   </label>
                   <div className="relative">
                     <input
-                    {...register('password',{required:'password is required'})}
+                      {...register('password', {
+                        required: 'password is required',
+                      })}
                       type="password"
-                      id='hs-toggle-password'
+                      id="hs-toggle-password"
                       placeholder="Enter your password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
-                       <button className="text-gray-400 absolute right-[14px] inset-y-0 my-auto active:text-gray-600"
-                       type='button'
-                       onClick={togglePasswordVisibility}
-                >
-                    {
-                        isPasswordHidden ? (
-                            <svg className="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                            </svg>
-
-                        )
-                    }
-                </button>
-
-                       
+                    <button
+                      className="text-gray-400 absolute right-[14px] inset-y-0 my-auto active:text-gray-600"
+                      type="button"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {isPasswordHidden ? (
+                        <svg
+                          className="w-6 h-6"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-6 h-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
+                          />
+                        </svg>
+                      )}
+                    </button>
                   </div>
                   {errors?.password && (
-                    <span className="text-red-500">
-                      Password is required
-                    </span>
+                    <span className="text-red-500">Password is required</span>
                   )}
                 </div>
 
-                
-
                 <div className="mt-5 mb-5">
-                <button
-                  
-                  className="inline-flex w-full items-center justify-center rounded-md bg-[#1D4ED8] px-3.5 py-2.5 font-semibold leading-7 text-white"
-                >{isLoading ? (
-                  <ClipLoader color="#c4c2c2" />
-                ) : (<> Create Account </>)}
-                 
-                </button>
+                  <button className="inline-flex w-full items-center justify-center rounded-md bg-[#1D4ED8] px-3.5 py-2.5 font-semibold leading-7 text-white">
+                    {isLoading ? (
+                      <ClipLoader color="#c4c2c2" />
+                    ) : (
+                      <> Create Account </>
+                    )}
+                  </button>
                 </div>
-
-            
 
                 <div className="mt-6 text-center">
                   <p>

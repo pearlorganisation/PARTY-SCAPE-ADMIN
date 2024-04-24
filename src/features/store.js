@@ -9,7 +9,7 @@ import ceremonyType from './slices/ceremonyType';
 import cake from './slices/cake';
 import booking from './slices/booking';
 import prospectiveCustomer from './slices/prospectiveCustomer';
-
+import availableSlots from './slices/availableSlots';
 
 // import
 
@@ -37,8 +37,8 @@ const reducer = combineReducers({
   cake,
   ceremonyType,
   booking,
+  availableSlots,
   prospectiveCustomer,
-
 
   // omitedPart: OmitReducer // not persisting this reducer
 });

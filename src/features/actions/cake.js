@@ -7,17 +7,13 @@ export const getAllCakes = createAsyncThunk(
   'getCake',
   async (payload, { rejectWithValue }) => {
     try {
-      const { data } = await instance.get(
-        '/cake',
-        payload,
-        {
-          withCredentials: true,
-        }
-      );
+      const { data } = await instance.get('/cake', payload, {
+        withCredentials: true,
+      });
 
       return data;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e.message);
     }
   }
 );
@@ -27,42 +23,34 @@ export const createCake = createAsyncThunk(
   'createCake',
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await instance.post(
-        '/cake',
-        payload,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await instance.post('/cake', payload, {
+        withCredentials: true,
+        headers: {
+          'Content-type': 'multipart/form-data',
+        },
+      });
 
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
 //update cakes api
 export const updateCake = createAsyncThunk(
   'updateCake',
-  async ({payload,id} ,{ rejectWithValue }) => {
+  async ({ payload, id }, { rejectWithValue }) => {
     try {
-      const response = await instance.patch(
-        `/cake/${id}`,
-        payload,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await instance.patch(`/cake/${id}`, payload, {
+        withCredentials: true,
+        headers: {
+          'Content-type': 'multipart/form-data',
+        },
+      });
 
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -80,7 +68,7 @@ export const deleteCake = createAsyncThunk(
       );
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );

@@ -12,7 +12,9 @@ const ViewTheater = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { theaterData, isLoading,isDeleted } = useSelector((state) => state.theater);
+  const { theaterData, isLoading, isDeleted } = useSelector(
+    (state) => state.theater
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,9 +27,9 @@ const ViewTheater = () => {
     fetchData();
   }, [dispatch]);
   useEffect(() => {
- if(isDeleted){
-  dispatch(getAllTheaters())
- }
+    if (isDeleted) {
+      dispatch(getAllTheaters());
+    }
   }, [isDeleted]);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -101,7 +103,8 @@ const ViewTheater = () => {
                   </td>
                 </tr>
               ) : (
-                Array.isArray(theaterData) && theaterData?.map((item, idx) => (
+                Array.isArray(theaterData) &&
+                theaterData?.map((item, idx) => (
                   <tr key={idx}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -111,7 +114,7 @@ const ViewTheater = () => {
                       <img className="rounded-lg" src={`${item?.logo?.path}`} />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                    {item.features[0]?.slice(0,69)}...
+                      {item.features[0]?.slice(0, 69)}...
                     </td>
                     <td className="text-right px-6 whitespace-nowrap">
                       <a
@@ -123,7 +126,11 @@ const ViewTheater = () => {
                         View
                       </a>
                       <a
-                        onClick={()=>navigate(`/updateTheater/${item._id}`,{state:item})}
+                        onClick={() =>
+                          navigate(`/updateTheater/${item._id}`, {
+                            state: item,
+                          })
+                        }
                         className="py-2 px-3 font-medium text-green-600 hover:text-green-500 duration-150 hover:bg-gray-50 rounded-lg cursor-pointer"
                       >
                         Edit

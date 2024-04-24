@@ -50,6 +50,9 @@ const theaterSlice = createSlice({
         state.isLoading = false;
         state.isUpdated = false;
         state.isDeleted=true;
+        toast.success("Deleted Successfully",{
+          position:"top-center"
+        })
       })
       .addCase(deleteTheater.rejected, (state, action) => {
         state.isLoading = false;
@@ -59,6 +62,9 @@ const theaterSlice = createSlice({
         state.theaterData = state.theaterData.filter(
           (theater) => theater._id !== action?.payload?.payload
         );
+        toast.error(state?.errorMessage, {
+          position: "top-center",
+        });
       })
       .addCase(updateTheater.pending, (state, action) => {
         state.isLoading = true;
@@ -68,12 +74,19 @@ const theaterSlice = createSlice({
         state.isLoading = false;
         state.isUpdated = true;
         state.theaterData = action.payload.data;
+        toast.success("Updated Theater Successfully",{
+          position:"top-center"
+        })
       })
       .addCase(updateTheater.rejected, (state, action) => {
         state.isLoading = false;
         state.isUpdated = false;
-        state.errorMessage = action.payload;
-        
+        state.errorMessage = action.payload || 'An error occurred while updating the theater.';
+
+        toast.error( action.payload || 'An error occurred while updating the theater.', {
+          position: "top-center",
+        });
+        console.log(action.payload)
       })
 
       .addCase(createTheater.pending, (state, action) => {
@@ -85,7 +98,7 @@ const theaterSlice = createSlice({
         state.theaterData = action.payload.data;
        
         toast.success("Theater Added successfully", {
-          position: "top-right",
+          position: "top-center",
         });
       })
      
@@ -93,7 +106,7 @@ const theaterSlice = createSlice({
         state.isLoading = false;
         state.errorMessage = action.payload ? action.payload : 'An error occurred while creating the theater.';
         toast.error(state?.errorMessage, {
-          position: "top-right",
+          position: "top-center",
         });
       });
   },

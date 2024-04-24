@@ -13,7 +13,7 @@ export const getAllTheaters = createAsyncThunk(
       console.log(data, 'datatattatatatat');
       return data;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -23,7 +23,6 @@ export const deleteTheater = createAsyncThunk(
   'deleteTheater',
   async (id, { rejectWithValue }) => {
     try {
-      
       const response = await instance.delete(
         `/theater/${id}`,
         {},
@@ -31,7 +30,7 @@ export const deleteTheater = createAsyncThunk(
       );
       return response;
     } catch (e) {
-      return rejectWithValue(e);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -43,12 +42,13 @@ export const updateTheater = createAsyncThunk(
       const response = await instance.patch(`/theater/${id}`, payload, {
         withCredentials: true,
         headers: {
-          "Content-type": "multipart/form-data",
+          'Content-type': 'multipart/form-data',
         },
       });
       return response;
     } catch (e) {
-      return rejectWithValue;
+      console.log(e);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );
@@ -60,12 +60,12 @@ export const createTheater = createAsyncThunk(
       const response = await instance.post(`/theater`, payload, {
         withCredentials: true,
         headers: {
-          "Content-type": "multipart/form-data",
+          'Content-type': 'multipart/form-data',
         },
       });
       return response;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e?.response?.data?.message);
     }
   }
 );

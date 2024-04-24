@@ -16,11 +16,11 @@ export const UpdateCake = () => {
 
   const {cakeData,isLoading} = useSelector((state)=>state.cake)
 
-  const {register,handleSubmit,formState: { errors },control}=useForm({
+  const {register,handleSubmit,control}=useForm({
     defaultValues:{
       name:item?.name ,
       price:item?.price,
-       isEggless:[  { value: true, label: "True" },{ value: false, label: "False" }].find(c => c.value === item.isEggless)
+     
       
     }
   })
@@ -34,17 +34,16 @@ export const UpdateCake = () => {
   const onSubmit = data =>{
     console.log('data',data)
 
-    const {isEggless}= data
-   const isEgglessValue= isEggless.value;
+
 
    const formData = new FormData();
    formData.append("name",data?.name)
-   formData.append("isEggless",isEgglessValue)
+
    formData.append("price",JSON.stringify(data?.price))
     Array.from(data?.image).forEach((img) => {
           formData.append("image",img)
           })
-          console.log("formData",formData.getAll("isEggless"))
+        
   dispatch(updateCake({payload:formData, id:item._id}))
  }
 
@@ -96,41 +95,7 @@ export const UpdateCake = () => {
             />
            
           </div>
-          <div className="w-full">
-            <label className="font-medium">Is Eggless</label>
-            <Controller 
-                                      control={control}
-                                      name="isEggless"
-                                      render={({ field, fieldState:{error} }) => (
-                                          <Select
-                                              value={field.value}
-                                              options={[  { value: true, label: "True" },{ value: false, label: "False" },
-                                            ]}
-                                              onChange={(selectedOption) => field.onChange(selectedOption)}
-                                              className="mt-2 "
-                                              placeholder=" Choose Type "
-                                             defaultValue={[  { value: true, label: "True" },{ value: false, label: "False" },
-                                            ].find(c => c.value === item.isEggless)}
-                                              styles={{
-                                                  control: (provided) => ({
-                                                      ...provided,
-                                                      border: '1px solid #CBD5E1', // Set custom border style
-                                                      borderRadius: '0.400rem', // Set custom border radius
-                                                      height: '40px', // Add height here
-                                                  }),
-                                                  placeholder: (provided) => ({
-                                                      ...provided,
-                                                      color: '#9CA3AF', // Set custom placeholder color
-                                                  }),
-                                              }}
- 
-                                          />
-                                     )}
-                                     
-                                      
-                                  />
-                                 
-          </div>
+          
 
             </div>
 
@@ -144,7 +109,7 @@ export const UpdateCake = () => {
             <div className="w-full sm:w-[443px] px-2 border rounded-md border-slate-300 ">Click here to upload</div></label>
          
           <input
-           {...register('image')}
+           {...register('image',{onChange:(e)=>{handlePhotoChange(e)}})}
            
            className="hidden w-54 sm:w-[443px] border-slate-300 text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file"/>
           </div>
@@ -154,7 +119,7 @@ export const UpdateCake = () => {
             <div className="sm:flex space-y-6 sm:space-y-0 justify-between ">
 
           
-            <label className="font-bold  text-black">Weight and Price</label>
+            <label className="font-bold  text-black">Weight and Price <span className="font-normal">(Regular and Eggless)</span></label>
             <button
         type="button"
         className=" border rounded-md  bg-pink-700 text-white font-semibold text-xl px-2 hover:bg-slate-950"
@@ -183,7 +148,17 @@ export const UpdateCake = () => {
           <input
             {...register(`price.${index}.price`)}
               type="text"
-              placeholder=" Price "
+              placeholder=" Regular Price "
+              className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
+            />
+  
+          </div>
+          <div className="w-full">
+          
+          <input
+            {...register(`price.${index}.egglessPrice`)}
+              type="text"
+              placeholder=" Eggless Price "
               className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
             />
   
@@ -201,7 +176,8 @@ export const UpdateCake = () => {
            
          
           <div style={{ marginTop: '4rem' }}>
-              <button className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
+              <button
+               disabled={isLoading} className="w-full px-4 py-2 text-white font-medium bg-pink-700 hover:bg-slate-950 active:bg-indigo-600 rounded-lg duration-150">
               {isLoading ? (
                 <ClipLoader color="#c4c2c2" />
               ) : (<>Update</>)}
