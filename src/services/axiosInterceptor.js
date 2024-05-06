@@ -6,8 +6,8 @@ export const injectStore = (_store) => {
   store = _store;
 };
 
-const baseURL = process.env.REACT_APP_API_BASE_URL_MAIN_PRODUCTION;
-// Creating new axios instance
+const baseURL = 'http://localhost:8000/api/v1';
+// Creating new axios instanc
 export const instance = axios.create({
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },

@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { deleteBooking, getAllBookings } from '../actions/booking';
+import {
+  deleteBooking,
+  getAllBookings,
+  offlineBooking,
+} from '../actions/booking';
 import toast from 'react-hot-toast';
 
 const initialState = {
@@ -10,6 +14,7 @@ const initialState = {
   isDeleted: false,
   errorMessage: '',
   bookingData: [],
+  successData: {},
 };
 
 const bookingSlice = createSlice({
@@ -30,6 +35,7 @@ const bookingSlice = createSlice({
         state.errorMessage = '';
 
         state.bookingData = action.payload.data;
+        state.successData = {};
       })
       .addCase(getAllBookings.rejected, (state, action) => {
         state.isLoading = false;
@@ -55,6 +61,18 @@ const bookingSlice = createSlice({
         toast.error(state?.errorMessage, {
           position: 'top-right',
         });
+      })
+      .addCase(offlineBooking.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(offlineBooking.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.successData = action?.payload;
+        toast.success('Booking Successfully Created...');
+      })
+      .addCase(offlineBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
       });
   },
 });

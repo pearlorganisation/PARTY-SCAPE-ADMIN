@@ -95,6 +95,34 @@ export default function ViewModalBooking({ setModal, viewData }) {
                 </td>
               </tr>
               <tr>
+                <td className="py-2 px-4 border border-gray-300">cake</td>
+                <td className="py-2 px-4 border border-gray-300">
+                  {viewData?.cake?.name}
+                </td>
+              </tr>
+              <tr>
+                <td className="py-2 px-4 border border-gray-300">
+                  cake quantity
+                </td>
+                <td className="py-2 px-4 border border-gray-300">
+                  {viewData?.cakeQuantity}
+                </td>
+              </tr>
+              <tr>
+                <td className="py-2 px-4 border border-gray-300">cakePrice</td>
+                <td className="py-2 px-4 border border-gray-300">
+                  {viewData?.cakePrice}
+                </td>
+              </tr>
+              <tr>
+                <td className="py-2 px-4 border border-gray-300">
+                  isCakeEggLess
+                </td>
+                <td className="py-2 px-4 border border-gray-300">
+                  {viewData?.isCakeEggLess ? 'True' : 'False'}
+                </td>
+              </tr>
+              <tr>
                 <td className="py-2 px-4 border border-gray-300">
                   Booked Slot
                 </td>
@@ -169,7 +197,7 @@ export default function ViewModalBooking({ setModal, viewData }) {
                   Total Amount
                 </td>
                 <td className="py-2 px-4 border border-gray-300">
-                  {viewData?.remainingPrice + 700}
+                  {viewData?.price}
                 </td>
               </tr>
               <tr>

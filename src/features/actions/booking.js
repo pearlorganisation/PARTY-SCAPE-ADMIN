@@ -38,3 +38,22 @@ export const deleteBooking = createAsyncThunk(
     }
   }
 );
+
+//offline booking
+export const offlineBooking = createAsyncThunk(
+  'newOfflineBooking',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await instance.post(
+        '/bookings/offlineBooking',
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
+      return response?.data;
+    } catch (e) {
+      return rejectWithValue(e?.message);
+    }
+  }
+);
