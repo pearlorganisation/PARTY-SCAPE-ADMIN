@@ -64,9 +64,10 @@ const CreateBooking = () => {
       price: 1199,
     },
   ];
+
   const { register, handleSubmit, reset, control } = useForm({});
 
-  const [theater, selectedTheater] = useState(null);
+  const [theater, setSelectedTheater] = useState(null);
   const [bookingPrice, setBookingPrice] = useState(0);
   const [bookingModal, setBookingModal] = useState(false);
   const [bookingData, setBookingData] = useState({});
@@ -126,7 +127,7 @@ const CreateBooking = () => {
     setFinalTheater(filterData);
 
     instance
-      .get(`theater/${finalTheater?.theaterName}`)
+      .get(`theater/${filterData?.theaterName}`)
       .then((data) => setBookedSlots(data?.data?.bookedSlots))
       .catch((e) => {
         console.log(e?.message);
@@ -193,7 +194,7 @@ const CreateBooking = () => {
                       onChange={(val) => {
                         onChange(val);
 
-                        selectedTheater(val);
+                        setSelectedTheater(val);
                       }}
                     />
                   )}

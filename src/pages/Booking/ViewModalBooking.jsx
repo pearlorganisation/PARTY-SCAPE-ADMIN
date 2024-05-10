@@ -115,11 +115,9 @@ export default function ViewModalBooking({ setModal, viewData }) {
                 </td>
               </tr>
               <tr>
+                <td className="py-2 px-4 border border-gray-300">cake-type</td>
                 <td className="py-2 px-4 border border-gray-300">
-                  isCakeEggLess
-                </td>
-                <td className="py-2 px-4 border border-gray-300">
-                  {viewData?.isCakeEggLess ? 'True' : 'False'}
+                  {viewData?.isCakeEggLess ? 'Eggless' : 'Regular'}
                 </td>
               </tr>
               <tr>
@@ -204,7 +202,7 @@ export default function ViewModalBooking({ setModal, viewData }) {
                 <td className="py-2 px-4 border border-gray-300">
                   Advance Received
                 </td>
-                <td className="py-2 px-4 border border-gray-300">700 </td>
+                <td className="py-2 px-4 border border-gray-300">750 </td>
               </tr>
               <tr>
                 <td className="py-2 px-4 border border-gray-300">

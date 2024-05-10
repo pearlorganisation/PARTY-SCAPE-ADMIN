@@ -8,6 +8,9 @@ import { Stack, Skeleton } from '@mui/material';
 import { deleteBooking, getAllBookings } from '../../features/actions/booking';
 import ViewModalBooking from './ViewModalBooking';
 import Debouncing from '../../utils/Debouncing';
+import axios from 'axios';
+import { instance } from '../../services/axiosInterceptor';
+import { MdOutlineFileDownload } from 'react-icons/md';
 
 const ViewBookings = () => {
   const [filter, setFilter] = useState('');
@@ -16,6 +19,17 @@ const ViewBookings = () => {
     (state) => state.booking
   );
   const navigate = useNavigate();
+
+  // const handleDownload = async () => {
+  //   instance
+  //     .get('/bookings/sheet')
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  // };
 
   const dispatch = useDispatch();
 
@@ -85,6 +99,17 @@ const ViewBookings = () => {
             </p>
           </div>
 
+          <div>
+            <a
+              href="
+            https://api.partyscape.in/api/v1/bookings/sheet"
+              target="_blank"
+              className="flex justify-center items-center gap-1 px-4 py-2 bg-indigo-500 text-white font-medium rounded-md"
+            >
+              <MdOutlineFileDownload size={20} />
+              Download
+            </a>
+          </div>
           <div className="bg-white rounded-lg p-1 px-4">
             <input
               onChange={(e) => {
@@ -140,7 +165,9 @@ const ViewBookings = () => {
                 Array.isArray(bookingData) &&
                 bookingData?.map((item, idx) => (
                   <tr key={idx}>
-                    <td className="px-6 py-4 whitespace-nowrap">{item?._id}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {item?.bookingId}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item?.bookedBy.name}
                     </td>
