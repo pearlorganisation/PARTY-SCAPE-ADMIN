@@ -112,7 +112,7 @@ const CreateBooking = () => {
       });
 
     setBookingPrice(newBookingPrice);
-    dispatch(offlineBooking(data));
+    // dispatch(offlineBooking(data));
     setBookingData(data);
     setBookingModal(true);
   };

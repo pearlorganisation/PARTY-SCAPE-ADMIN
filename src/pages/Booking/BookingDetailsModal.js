@@ -7,7 +7,7 @@ const BookingDetailsModal = ({ bookingData, bookingPrice }) => {
   const wrapperRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { successData } = useSelector((state) => state?.booking);
+  const { successData, isLoading } = useSelector((state) => state?.booking);
 
   const handleSumit = () => {
     console.log(bookingPrice, 'bookingPriceee123');
@@ -38,12 +38,22 @@ const BookingDetailsModal = ({ bookingData, bookingPrice }) => {
         <div class="p-3 space-y-2 max-w-4xl w-full mx-auto">
           <div className="flex justify-between items-start">
             <p class="text-lg font-medium">Preview</p>
-            <button
-              onClick={handleSumit}
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
-            >
-              Submit
-            </button>
+            {isLoading ? (
+              <button
+                disabled={isLoading}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Loading...
+              </button>
+            ) : (
+              <button
+                disabled={isLoading}
+                onClick={handleSumit}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Submit
+              </button>
+            )}
           </div>
           <div class="w-full overflow-x-auto">
             <table
