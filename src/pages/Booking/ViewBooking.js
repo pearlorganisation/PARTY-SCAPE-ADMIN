@@ -193,9 +193,9 @@ const ViewBookings = () => {
                       </button>
                       <button
                         onClick={() => {
-                          navigate(`/updateBooking/${item?._id}`, {
-                            state: item,
-                          });
+                          // navigate(`/updateBooking/${item?._id}`, {
+                          //   state: item,
+                          // });
                         }}
                         className="py-2 flex gap-1 leading-none px- font-semibold text-green-500 hover:text-green-400 duration-150 hover:bg-gray-50 rounded-lg"
                       >

@@ -328,6 +328,7 @@ const CreateBooking = () => {
                   name="cake"
                   render={({ field: { onChange, value, ref } }) => (
                     <Select
+                      isClearable
                       options={cakeData.map((item) => {
                         return {
                           value: { id: item?._id, price: item?.price },
