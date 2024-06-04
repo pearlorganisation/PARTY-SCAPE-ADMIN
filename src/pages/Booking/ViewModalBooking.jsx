@@ -8,7 +8,7 @@ export default function ViewModalBooking({ setModal, viewData }) {
   const formattedDate = updatedAtDate
     ? updatedAtDate.toISOString().split('T')[0]
     : '';
-
+  const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
   return (
     <div
       className="fixed top-0 left-0 z-20 flex h-screen w-screen items-center justify-center bg-slate-300/20 backdrop-blur-sm"
@@ -83,6 +83,12 @@ export default function ViewModalBooking({ setModal, viewData }) {
                 </td>
               </tr>
               <tr>
+                <td className="py-2 px-4 border border-gray-300">Created At</td>
+                <td className="py-2 px-4 border border-gray-300">
+                  {new Date(viewData?.createdAt).toLocaleDateString('en-US', options)} - {new Date(viewData?.createdAt).toLocaleTimeString()}
+                </td>
+              </tr>
+              <tr>
                 <td className="py-2 px-4 border border-gray-300">Booked On</td>
                 <td className="py-2 px-4 border border-gray-300">
                   {formattedDate}
@@ -145,15 +151,15 @@ export default function ViewModalBooking({ setModal, viewData }) {
                   <div>
                     {viewData && viewData?.ceremonyTypeLabels
                       ? viewData?.ceremonyTypeLabels?.map((item, idx) => (
-                          <div
-                            className="border border-slate-300 mb-2 rounded-md px-2 py-2 space-x-2"
-                            key={idx}
-                          >
-                            <span className="bg-slate-100 mb-2 rounded-md px-2 ">
-                              {item?.label} : {item?.value}
-                            </span>{' '}
-                          </div>
-                        ))
+                        <div
+                          className="border border-slate-300 mb-2 rounded-md px-2 py-2 space-x-2"
+                          key={idx}
+                        >
+                          <span className="bg-slate-100 mb-2 rounded-md px-2 ">
+                            {item?.label} : {item?.value}
+                          </span>{' '}
+                        </div>
+                      ))
                       : 'No Ceremony Label available'}
                   </div>
                 </td>
@@ -170,23 +176,23 @@ export default function ViewModalBooking({ setModal, viewData }) {
                 <td className="py-2 px-4 border border-gray-300">
                   {viewData && viewData?.addOns
                     ? viewData.addOns.map((item, idx) => (
-                        <div
-                          className="border border-slate-300 mb-2 rounded-md px-2 flex gap-2"
-                          key={idx}
-                        >
-                          <div className="flex items-center">
-                            Add On {idx + 1} :{' '}
-                          </div>
-                          <div className="p-3 space-x-2">
-                            <span className="bg-slate-100 mb-2 rounded-md px-2 ">
-                              Title : {item?.title}
-                            </span>{' '}
-                            <span className="bg-slate-100 mb-2 rounded-md px-2 ">
-                              Price : {item?.price}
-                            </span>
-                          </div>
+                      <div
+                        className="border border-slate-300 mb-2 rounded-md px-2 flex gap-2"
+                        key={idx}
+                      >
+                        <div className="flex items-center">
+                          Add On {idx + 1} :{' '}
                         </div>
-                      ))
+                        <div className="p-3 space-x-2">
+                          <span className="bg-slate-100 mb-2 rounded-md px-2 ">
+                            Title : {item?.title}
+                          </span>{' '}
+                          <span className="bg-slate-100 mb-2 rounded-md px-2 ">
+                            Price : {item?.price}
+                          </span>
+                        </div>
+                      </div>
+                    ))
                     : 'No AddOns available'}
                 </td>
               </tr>

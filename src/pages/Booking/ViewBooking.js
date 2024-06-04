@@ -11,6 +11,7 @@ import Debouncing from '../../utils/Debouncing';
 import axios from 'axios';
 import { instance } from '../../services/axiosInterceptor';
 import { MdOutlineFileDownload } from 'react-icons/md';
+import { FiEdit } from 'react-icons/fi';
 
 const ViewBookings = () => {
   const [filter, setFilter] = useState('');
@@ -181,7 +182,7 @@ const ViewBookings = () => {
                       {item?.theater.theaterName}
                     </td>
 
-                    <td className=" px-6 whitespace-nowrap">
+                    <td className=" px-6 flex gap-2 whitespace-nowrap">
                       <button
                         onClick={() => {
                           handleViewModal(item);
@@ -192,9 +193,19 @@ const ViewBookings = () => {
                       </button>
                       <button
                         onClick={() => {
+                          // navigate(`/updateBooking/${item?._id}`, {
+                          //   state: item,
+                          // });
+                        }}
+                        className="py-2 flex gap-1 leading-none px- font-semibold text-green-500 hover:text-green-400 duration-150 hover:bg-gray-50 rounded-lg"
+                      >
+                        Edit <FiEdit />
+                      </button>
+                      <button
+                        onClick={() => {
                           handleModal(item?._id);
                         }}
-                        className="py-2 leading-none px-3 font-semibold text-red-500 hover:text-red-600 duration-150 hover:bg-gray-50 rounded-lg"
+                        className="py-2 leading-none px- font-semibold text-red-500 hover:text-red-600 duration-150 hover:bg-gray-50 rounded-lg"
                       >
                         Delete
                       </button>

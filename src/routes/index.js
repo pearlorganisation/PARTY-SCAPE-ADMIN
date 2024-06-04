@@ -13,6 +13,7 @@ import { UpdateCake } from '../pages/Cake/UpdateCake';
 import { ProspectiveCustomers } from '../pages/ProspectiveCustomer/ProspectiveCustomers';
 import { components } from 'react-select';
 import AvailableSlots from '../pages/AvailableSlots';
+import UpdateBooking from '../pages/Booking/UpdateBooking';
 
 // ------------------------------------------------------------------------------
 
@@ -58,6 +59,11 @@ const coreRoutes = [
     path: '/createBooking',
     title: 'create booking',
     component: CreateBooking,
+  },
+  {
+    path: '/updateBooking/:bookingId',
+    title: 'Update Booking',
+    component: UpdateBooking,
   },
 
   //Cake routes

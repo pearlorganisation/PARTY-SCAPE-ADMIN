@@ -11,8 +11,10 @@ import { instance } from '../../services/axiosInterceptor';
 import { offlineBooking } from '../../features/actions/booking';
 import BookingDetailsModal from './BookingDetailsModal';
 import { createPortal } from 'react-dom';
+import { useLocation } from 'react-router-dom';
+import moment from 'moment/moment';
 
-const CreateBooking = () => {
+const UpdateBooking = () => {
   const AddOnsData = [
     {
       _id: 1,
@@ -64,8 +66,8 @@ const CreateBooking = () => {
       price: 1199,
     },
   ];
-
-  const { register, handleSubmit, reset, control } = useForm({});
+  const { state } = useLocation();
+  console.log(state, 'state');
 
   const [theater, setSelectedTheater] = useState(null);
   const [bookingPrice, setBookingPrice] = useState(0);
@@ -78,6 +80,7 @@ const CreateBooking = () => {
   // const []
   const [otherDetails, setOtherDetails] = useState([]);
   const [cake, selectedCake] = useState(null);
+  const [defaultBookSlot, setDefaultBookSlot] = useState({});
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -99,7 +102,7 @@ const CreateBooking = () => {
 
     if (quantity) {
       let tempData = JSON.parse(quantity);
-      console.log(quantity);
+      //   console.log(quantity);
       newBookingPrice += Number(tempData?.price);
     }
 
@@ -107,12 +110,12 @@ const CreateBooking = () => {
       Array.isArray(addOns) &&
       addOns?.length >= 1 &&
       addOns?.forEach((it) => {
-        console.log(newBookingPrice, 'new booking price');
+        // console.log(newBookingPrice, 'new booking price');
         newBookingPrice += it?.value?.price;
       });
 
     setBookingPrice(newBookingPrice);
-    // dispatch(offlineBooking(data));
+    dispatch(offlineBooking(data));
     setBookingData(data);
     setBookingModal(true);
   };
@@ -121,9 +124,10 @@ const CreateBooking = () => {
     let filterData =
       Array.isArray(theaterData) &&
       theaterData?.find((i) => {
+        console.log(theater?.value, i);
         return i?._id === theater?.value;
       });
-
+    console.log('filterData::', filterData);
     setFinalTheater(filterData);
 
     instance
@@ -164,12 +168,78 @@ const CreateBooking = () => {
     setBookedFilterData(filterDate?.slots);
   }, [date]);
 
+  useEffect(() => {
+    setSelectedTheater({
+      value: state?.theater?._id,
+      label: state?.theater?.theaterName,
+    });
+    const parsedDate = moment(state?.parsedDate);
+
+    // Format the date as "YYYY-MM-DD"
+    const normalDate = parsedDate.format('YYYY-MM-DD');
+    setDate(normalDate);
+  }, [state]);
+
+  useEffect(() => {
+    finalTheater?.slots
+      ?.filter((item) => {
+        const tim = `${item?.start} - ${item?.end}`;
+        console.log(tim, 'tim');
+        return state?.bookedSlot === tim;
+      })
+      .map((item) => {
+        const tim = `${item?.start} - ${item?.end}`;
+        setDefaultBookSlot({
+          value: tim,
+          label: tim,
+        });
+        return {
+          value: tim,
+          label: tim,
+        };
+      });
+  }, [finalTheater]);
+
+  console.log(defaultBookSlot, 'defaultBookSlot');
+  console.log(finalTheater, 'finalTheater');
+
+  const { register, handleSubmit, reset, control } = useForm({
+    defaultValues: {
+      theater: [{ value: state?.theater, label: state?.theater?.theaterName }],
+      bookedSlot: [
+        {
+          label: defaultBookSlot?.label,
+          value: defaultBookSlot?.value,
+        },
+      ],
+      ceremonyType: [
+        { value: state?.ceremonyType?._id, label: state?.ceremonyType?.type },
+      ],
+      cake: [{ value: state?.cake?.price, label: state?.cake?.name }],
+      addOns: state?.addOns?.map((item) => {
+        return {
+          value: { title: item?.title, price: item?.price },
+          label: item?.title,
+        };
+      }),
+      totalPeople: [{ value: state?.totalPeople, label: state?.totalPeople }],
+      name: state?.bookedBy?.name,
+      email: state?.bookedBy?.email,
+      whatsappNumber: state?.bookedBy?.whatsappNumber,
+      otherDetails: [],
+    },
+  });
+
+  useEffect(() => {
+    setOtherDetails(state?.ceremonyTypeLabels);
+  }, []);
+  console.log(otherDetails, 'otherDetails');
   return (
     <div>
       <div className="bg-gray-800">
         <div className=" flex justify-center">
           <h3 className="text-gray-600 text-2xl font-semibold sm:text-3xl">
-            Create Booking details
+            Update Booking details
           </h3>
         </div>
         <div className="bg-white rounded-lg shadow p-4 py-6  sm:rounded-lg sm:max-w-5xl mt-8 mx-auto">
@@ -193,6 +263,7 @@ const CreateBooking = () => {
                       value={value || null}
                       onChange={(val) => {
                         onChange(val);
+                        console.log(val);
 
                         setSelectedTheater(val);
                       }}
@@ -209,11 +280,23 @@ const CreateBooking = () => {
                     name="bookedSlot"
                     render={({ field: { onChange, value, ref } }) => (
                       <Select
+                        defaultValue={{
+                          label: defaultBookSlot?.label,
+                          value: defaultBookSlot?.value,
+                        }}
                         options={
                           finalTheater &&
                           finalTheater?.slots?.map((item) => {
                             const tim = `${item?.start} - ${item?.end}`;
-
+                            // if (tim === state?.bookedSlot) {
+                            //   return {
+                            //     value: {
+                            //       id: item?._id,
+                            //       price: item?.offerPrice,
+                            //     },
+                            //     label: tim,
+                            //   };
+                            // } else
                             if (bookedFilterData?.includes(tim)) {
                               return {
                                 value: item?._id,
@@ -252,6 +335,9 @@ const CreateBooking = () => {
                 {theater ? (
                   <input
                     type="date"
+                    defaultValue={moment(state?.parsedDate).format(
+                      'YYYY-MM-DD'
+                    )}
                     {...register('date', { required: 'date is required' })}
                     onChange={(e) => {
                       setDate(e?.target?.value);
@@ -276,10 +362,11 @@ const CreateBooking = () => {
                       value={value || null}
                       onChange={(val) => {
                         onChange(val);
-
+                        console.log(val);
                         dataList
                           .filter((item) => item?._id === val?.value)
                           .forEach((it) => {
+                            console.log(it);
                             setOtherDetails(it?.otherDetails);
                           });
                       }}
@@ -312,6 +399,7 @@ const CreateBooking = () => {
                         {...register(`otherDetails.${ind}`, {
                           required: 'Phone number is required!!',
                         })}
+                        defaultValue={item?.value || ''}
                         type="text"
                         className="w-full mt-2  px-5 py-2 text-gray-500 border-slate-300 bg-transparent outline-none border focus:border-teal-400 shadow-sm rounded-lg"
                       />
@@ -328,7 +416,10 @@ const CreateBooking = () => {
                   name="cake"
                   render={({ field: { onChange, value, ref } }) => (
                     <Select
-                      isClearable
+                      defaultValue={{
+                        value: state?.cake?.price,
+                        label: state?.cake?.name,
+                      }}
                       options={cakeData.map((item) => {
                         return {
                           value: { id: item?._id, price: item?.price },
@@ -352,6 +443,7 @@ const CreateBooking = () => {
                       }}
                       value={value || null}
                       onChange={(val) => {
+                        console.log(val);
                         onChange(val);
                         selectedCake(val);
                       }}
@@ -403,6 +495,7 @@ const CreateBooking = () => {
                       }))}
                       value={value || null}
                       onChange={(val) => {
+                        console.log(val);
                         onChange(val);
                       }}
                       isMulti
@@ -442,6 +535,7 @@ const CreateBooking = () => {
                         }}
                         value={value || null}
                         onChange={(val) => {
+                          console.log(val);
                           onChange(val);
                         }}
                       />
@@ -488,7 +582,11 @@ const CreateBooking = () => {
                 />
               </div>
             </div>
-            <input type="submit" value="Submit" />
+            <input
+              className="bg-blue-500 rounded-md px-3 py-2 text-white"
+              type="submit"
+              value="Submit"
+            />
           </form>
         </div>
       </div>
@@ -505,4 +603,4 @@ const CreateBooking = () => {
   );
 };
 
-export default CreateBooking;
+export default UpdateBooking;
