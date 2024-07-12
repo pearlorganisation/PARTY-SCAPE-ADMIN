@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
 
 const Pagination = ({ searchParams, setSearchParams, totalPages }) => {
-  const [pages, setPages] = useState(['1', '2', '3', , '...', '8', '9', '10']);
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     let page = searchParams.get('page');
-    if (page) {
-      setSearchParams(`page=${currentPage}`);
-    } else {
-      setSearchParams('');
-    }
+    setSearchParams(`page=${currentPage}`);
   }, [currentPage]);
 
   return (

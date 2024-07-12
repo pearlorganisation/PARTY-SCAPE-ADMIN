@@ -11,8 +11,10 @@ import {
 } from '../../features/actions/prospectiveCustomer';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import Pagination from '../../components/Pagination/Pagination';
+import { useSearchParams } from 'react-router-dom';
 
 export const ProspectiveCustomers = () => {
+  let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -127,6 +129,11 @@ export const ProspectiveCustomers = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          totalPages={10}
+        />
       </div>
       {showDeleteModal && (
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />
