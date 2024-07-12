@@ -10,6 +10,7 @@ import {
   getAllProspectiveCustomers,
 } from '../../features/actions/prospectiveCustomer';
 import { MdOutlineFileDownload } from 'react-icons/md';
+import Pagination from '../../components/Pagination/Pagination';
 
 export const ProspectiveCustomers = () => {
   const navigate = useNavigate();

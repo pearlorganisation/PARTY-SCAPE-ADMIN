@@ -12,14 +12,21 @@ import axios from 'axios';
 import { instance } from '../../services/axiosInterceptor';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
+import Pagination from '../../components/Pagination/Pagination';
+import { useSearchParams, useParams } from 'react-router-dom';
 
 const ViewBookings = () => {
   const [filter, setFilter] = useState('');
   const [search, setSearch] = useState('');
-  const { bookingData, isLoading, isDeleted } = useSelector(
+  const { bookingData, isLoading, isDeleted, totalPages } = useSelector(
     (state) => state.booking
   );
   const navigate = useNavigate();
+  let [searchParams, setSearchParams] = useSearchParams();
+  let page = searchParams.get('page');
+  useEffect(() => {
+    console.log('searchParams', page);
+  }, [page]);
 
   // const handleDownload = async () => {
   //   instance
@@ -35,7 +42,7 @@ const ViewBookings = () => {
   const dispatch = useDispatch();
 
   const getBookings = () => {
-    dispatch(getAllBookings({ filter, search }));
+    dispatch(getAllBookings({ filter, search, page }));
   };
 
   useEffect(() => {
@@ -49,6 +56,12 @@ const ViewBookings = () => {
     let fun = Debouncing(getBookings);
     fun();
   }, [search]);
+
+  useEffect(() => {
+    setFilter('');
+    let fun = Debouncing(getBookings);
+    fun();
+  }, [page]);
 
   useEffect(() => {
     dispatch(getAllBookings({ filter, search }));
@@ -216,6 +229,11 @@ const ViewBookings = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          totalPages={totalPages}
+        />
       </div>
       {showDeleteModal && (
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />

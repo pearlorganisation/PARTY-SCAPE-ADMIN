@@ -8,7 +8,7 @@ export const getAllBookings = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const { data } = await instance.get(
-        `/bookings?search=${payload.search}&filter=${payload.filter}`,
+        `/bookings?search=${payload.search}&filter=${payload.filter}&page=${payload.page}`,
         payload,
         {
           withCredentials: true,
