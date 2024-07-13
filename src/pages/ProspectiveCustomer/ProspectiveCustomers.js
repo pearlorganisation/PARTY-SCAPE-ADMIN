@@ -17,10 +17,10 @@ export const ProspectiveCustomers = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const page = searchParams.get('page');
 
-  const { prospectiveCustomerData, isLoading, isDeleted } = useSelector(
-    (state) => state.prospectiveCustomer
-  );
+  const { prospectiveCustomerData, isLoading, isDeleted, totalPages } =
+    useSelector((state) => state.prospectiveCustomer);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState();
@@ -37,8 +37,8 @@ export const ProspectiveCustomers = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllProspectiveCustomers());
-  }, []);
+    dispatch(getAllProspectiveCustomers({ page }));
+  }, [page]);
 
   useEffect(() => {
     if (isDeleted) {
@@ -132,7 +132,7 @@ export const ProspectiveCustomers = () => {
         <Pagination
           searchParams={searchParams}
           setSearchParams={setSearchParams}
-          totalPages={10}
+          totalPages={totalPages}
         />
       </div>
       {showDeleteModal && (
