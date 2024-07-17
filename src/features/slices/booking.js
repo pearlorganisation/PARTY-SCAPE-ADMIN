@@ -15,6 +15,7 @@ const initialState = {
   errorMessage: '',
   bookingData: [],
   successData: {},
+  totalPages: 0,
 };
 
 const bookingSlice = createSlice({
@@ -35,6 +36,7 @@ const bookingSlice = createSlice({
         state.errorMessage = '';
 
         state.bookingData = action.payload.data;
+        state.totalPages = action.payload.totalPages;
         state.successData = {};
       })
       .addCase(getAllBookings.rejected, (state, action) => {

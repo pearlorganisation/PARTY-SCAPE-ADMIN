@@ -10,14 +10,17 @@ import {
   getAllProspectiveCustomers,
 } from '../../features/actions/prospectiveCustomer';
 import { MdOutlineFileDownload } from 'react-icons/md';
+import Pagination from '../../components/Pagination/Pagination';
+import { useSearchParams } from 'react-router-dom';
 
 export const ProspectiveCustomers = () => {
+  let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const page = searchParams.get('page');
 
-  const { prospectiveCustomerData, isLoading, isDeleted } = useSelector(
-    (state) => state.prospectiveCustomer
-  );
+  const { prospectiveCustomerData, isLoading, isDeleted, totalPages } =
+    useSelector((state) => state.prospectiveCustomer);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState();
@@ -34,8 +37,8 @@ export const ProspectiveCustomers = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllProspectiveCustomers());
-  }, []);
+    dispatch(getAllProspectiveCustomers({ page }));
+  }, [page]);
 
   useEffect(() => {
     if (isDeleted) {
@@ -126,6 +129,11 @@ export const ProspectiveCustomers = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          totalPages={totalPages}
+        />
       </div>
       {showDeleteModal && (
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />
