@@ -6,8 +6,8 @@ export const injectStore = (_store) => {
   store = _store;
 };
 
-const baseURL = 'https://api.partyscape.in/api/v1';
-// const baseURL = 'http://localhost.com:8000/api/v1';
+// const baseURL = 'https://api.partyscape.in/api/v1';
+const baseURL = 'http://localhost.com:8000/api/v1';
 // Creating new axios instanc
 export const instance = axios.create({
   withCredentials: true,
