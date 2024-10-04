@@ -25,6 +25,15 @@ export const ProspectiveCustomers = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState();
 
+  const [currentPage, setCurrentPage] = useState(
+    () => parseInt(searchParams.get('page')) || 1
+  );
+
+  useEffect(() => {
+    setSearchParams({ page: currentPage });
+  },[currentPage])
+
+
   const handleDelete = () => {
     dispatch(deleteProspectiveCustomer(id));
     setShowDeleteModal(false);
@@ -130,8 +139,8 @@ export const ProspectiveCustomers = () => {
           </table>
         </div>
         <Pagination
-          searchParams={searchParams}
-          setSearchParams={setSearchParams}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
           totalPages={totalPages}
         />
       </div>

@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const Pagination = ({ searchParams, setSearchParams, totalPages }) => {
-  let page = searchParams.get('page');
-  const [currentPage, setCurrentPage] = useState(page ?? 1);
-  useEffect(() => {
-    setSearchParams(`page=${currentPage}`);
-  }, [currentPage]);
+const Pagination = ({ currentPage, setCurrentPage, totalPages }) => {
 
   return (
     <div className="max-w-screen-xl mx-auto mt-12 px-4 text-gray-600 md:px-8">

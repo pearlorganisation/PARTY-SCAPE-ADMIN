@@ -8,12 +8,21 @@ export const getAllBookings = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const { data } = await instance.get(
-        `/bookings?search=${payload.search}&filter=${payload.filter}&page=${payload.page}`,
-        payload,
+        `/bookings?search=${payload.search || ''}&filter=${payload.filter || ''}&page=${payload.page ?? 1}`,
         {
           withCredentials: true,
         }
       );
+      console.log(data)
+
+      if(data?.data ){
+        console.log("nisndfisdfi")
+        return {
+          data: (data?.data?.[0]?.data && Array.isArray(data?.data?.[0]?.data)) ? data.data[0].data : [], 
+          totalPages: (data?.data?.[0]?.totalCount?.[0]?.count !== undefined) ? Math.ceil(data.data[0].totalCount[0].count / 10) : 1, 
+          status: data?.status || false, 
+        }
+      }
 
       return data;
     } catch (e) {
