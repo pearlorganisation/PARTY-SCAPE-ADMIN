@@ -7,9 +7,6 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Stack, Skeleton } from '@mui/material';
 import { deleteBooking, getAllBookings } from '../../features/actions/booking';
 import ViewModalBooking from './ViewModalBooking';
-import Debouncing from '../../utils/Debouncing';
-import axios from 'axios';
-import { instance } from '../../services/axiosInterceptor';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
 import Pagination from '../../components/Pagination/Pagination';
@@ -17,6 +14,7 @@ import { useSearchParams, useParams } from 'react-router-dom';
 
 const ViewBookings = () => {
   let [searchParams, setSearchParams] = useSearchParams();
+  const isFirstRender = useRef(true);
 
   const [currentPage, setCurrentPage] = useState(
     () => parseInt(searchParams.get('page')) || 1
@@ -33,14 +31,24 @@ const ViewBookings = () => {
 
   const getBookings = useDebouncedCallback(() => {
     dispatch(getAllBookings({ filter, search, page: currentPage }));
-  }, 1000);
+  }, 500);
 
+  // This useEffect will run whenever the search, filter or currentPage changes.
+  // It will call the getBookings function and update the URL parameters.
   useEffect(() => {
+    if (!isFirstRender.current) {
       getBookings();
       setSearchParams({ filter, search, page: currentPage });
-  },[search, filter, currentPage])
+    }
+  }, [search, filter, currentPage]);
 
-
+  // This useEffect will run only on the first render.
+  // It will call the getBookings function and update the URL parameters.
+  useEffect(() => {
+    dispatch(getAllBookings({ filter, search, page: currentPage }));
+    setSearchParams({ filter, search, page: currentPage });
+    isFirstRender.current = false;
+  }, []);
 
   useEffect(() => {
     if (isDeleted) {

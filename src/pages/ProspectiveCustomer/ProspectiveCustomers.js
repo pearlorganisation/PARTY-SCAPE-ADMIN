@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Delete from '../../components/Delete';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,12 +12,14 @@ import {
 import { MdOutlineFileDownload } from 'react-icons/md';
 import Pagination from '../../components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
+import { useDebouncedCallback } from 'use-debounce';
+
 
 export const ProspectiveCustomers = () => {
   let [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const isFirstRender = useRef(true);
+
   const dispatch = useDispatch();
-  const page = searchParams.get('page');
 
   const { prospectiveCustomerData, isLoading, isDeleted, totalPages } =
     useSelector((state) => state.prospectiveCustomer);
@@ -28,11 +30,6 @@ export const ProspectiveCustomers = () => {
   const [currentPage, setCurrentPage] = useState(
     () => parseInt(searchParams.get('page')) || 1
   );
-
-  useEffect(() => {
-    setSearchParams({ page: currentPage });
-  },[currentPage])
-
 
   const handleDelete = () => {
     dispatch(deleteProspectiveCustomer(id));
@@ -46,8 +43,21 @@ export const ProspectiveCustomers = () => {
   };
 
   useEffect(() => {
-    dispatch(getAllProspectiveCustomers({ page }));
-  }, [page]);
+    dispatch(getAllProspectiveCustomers({ page:currentPage }));
+    setSearchParams({ page: currentPage });
+    isFirstRender.current = false;
+  }, []);
+
+  const getProspects = useDebouncedCallback(() => {
+    dispatch(getAllProspectiveCustomers({ page: currentPage }));
+  }, 500);
+
+  useEffect(() => {
+    if (!isFirstRender.current) {
+      getProspects();
+      setSearchParams({ page: currentPage });
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     if (isDeleted) {
