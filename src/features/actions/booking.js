@@ -15,16 +15,11 @@ export const getAllBookings = createAsyncThunk(
       );
       console.log(data)
 
-      if(data?.data ){
-        console.log("nisndfisdfi")
-        return {
-          data: (data?.data?.[0]?.data && Array.isArray(data?.data?.[0]?.data)) ? data.data[0].data : [], 
-          totalPages: (data?.data?.[0]?.totalCount?.[0]?.count !== undefined) ? Math.ceil(data.data[0].totalCount[0].count / 10) : 1, 
-          status: data?.status || false, 
-        }
+      return {
+        data: data?.data ? data.data : [], 
+        totalPages: data?.totalCount ?  Math.ceil(data.totalCount / 10) : 1, 
+        status: data?.status || false, 
       }
-
-      return data;
     } catch (e) {
       return rejectWithValue(e);
     }
