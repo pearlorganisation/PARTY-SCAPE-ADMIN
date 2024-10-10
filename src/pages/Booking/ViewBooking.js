@@ -1,75 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Delete from '../../components/Delete';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-
+import { useDebouncedCallback } from 'use-debounce';
 import { Stack, Skeleton } from '@mui/material';
 import { deleteBooking, getAllBookings } from '../../features/actions/booking';
 import ViewModalBooking from './ViewModalBooking';
-import Debouncing from '../../utils/Debouncing';
-import axios from 'axios';
-import { instance } from '../../services/axiosInterceptor';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
 import Pagination from '../../components/Pagination/Pagination';
 import { useSearchParams, useParams } from 'react-router-dom';
 
 const ViewBookings = () => {
-  const [filter, setFilter] = useState('');
-  const [search, setSearch] = useState('');
+  let [searchParams, setSearchParams] = useSearchParams();
+  const isFirstRender = useRef(true);
+
+  const [currentPage, setCurrentPage] = useState(
+    () => parseInt(searchParams.get('page')) || 1
+  );
+
+  const [filter, setFilter] = useState(() => searchParams.get('filter') || '');
+  const [search, setSearch] = useState(() => searchParams.get('search') || '');
   const { bookingData, isLoading, isDeleted, totalPages } = useSelector(
     (state) => state.booking
   );
+
   const navigate = useNavigate();
-  let [searchParams, setSearchParams] = useSearchParams();
-  let page = searchParams.get('page');
-  useEffect(() => {
-    console.log('searchParams', page);
-  }, [page]);
-
-  // const handleDownload = async () => {
-  //   instance
-  //     .get('/bookings/sheet')
-  //     .then((data) => {
-  //       console.log(data);
-  //     })
-  //     .catch((e) => {
-  //       console.log(e);
-  //     });
-  // };
-
   const dispatch = useDispatch();
 
-  const getBookings = () => {
-    dispatch(getAllBookings({ filter, search, page }));
-  };
+  const getBookings = useDebouncedCallback(() => {
+    dispatch(getAllBookings({ filter, search, page: currentPage }));
+  }, 500);
 
+  // This useEffect will run whenever the search, filter or currentPage changes.
+  // It will call the getBookings function and update the URL parameters.
   useEffect(() => {
-    setSearch('');
-    let fun = Debouncing(getBookings);
-    fun();
-  }, [filter]);
+    if (!isFirstRender.current) {
+      getBookings();
+      setSearchParams({ filter, search, page: currentPage });
+    }
+  }, [search, filter, currentPage]);
 
+  // This useEffect will run only on the first render.
+  // It will call the getBookings function and update the URL parameters.
   useEffect(() => {
-    setFilter('');
-    let fun = Debouncing(getBookings);
-    fun();
-  }, [search]);
-
-  useEffect(() => {
-    setFilter('');
-    let fun = Debouncing(getBookings);
-    fun();
-  }, [page]);
-
-  useEffect(() => {
-    dispatch(getAllBookings({ filter, search }));
+    dispatch(getAllBookings({ filter, search, page: currentPage }));
+    setSearchParams({ filter, search, page: currentPage });
+    isFirstRender.current = false;
   }, []);
 
   useEffect(() => {
     if (isDeleted) {
-      dispatch(getAllBookings({ filter, search }));
+      dispatch(getAllBookings({ filter, search, page: currentPage }));
     }
   }, [isDeleted]);
 
@@ -128,6 +111,7 @@ const ViewBookings = () => {
             <input
               onChange={(e) => {
                 setSearch(e.target.value);
+                setCurrentPage(1);
               }}
               className="bg-transparent outline-none"
               placeholder="Search"
@@ -138,6 +122,7 @@ const ViewBookings = () => {
             <input
               onChange={(e) => {
                 setFilter(e.target.value);
+                setCurrentPage(1);
               }}
               className="p-1 px-4 rounded-lg outline-none"
               type="date"
@@ -183,7 +168,7 @@ const ViewBookings = () => {
                       {item?.bookingId}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.bookedBy.name}
+                      {item?.bookedBy?.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item?.bookedDate}
@@ -192,7 +177,7 @@ const ViewBookings = () => {
                       {item?.bookedSlot}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.theater.theaterName}
+                      {item?.theater?.theaterName}
                     </td>
 
                     <td className=" px-6 flex gap-2 whitespace-nowrap">
@@ -230,8 +215,8 @@ const ViewBookings = () => {
           </table>
         </div>
         <Pagination
-          searchParams={searchParams}
-          setSearchParams={setSearchParams}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
           totalPages={totalPages}
         />
       </div>

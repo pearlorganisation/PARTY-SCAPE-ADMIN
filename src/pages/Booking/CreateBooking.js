@@ -488,7 +488,9 @@ const CreateBooking = () => {
                 />
               </div>
             </div>
-            <input type="submit" value="Submit" />
+            <input
+            className="px-4 py-2 bg-blue-500 text-white rounded-md cursor-pointer"
+            type="submit" value="Submit" />
           </form>
         </div>
       </div>

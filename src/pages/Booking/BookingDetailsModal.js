@@ -30,12 +30,12 @@ const BookingDetailsModal = ({ bookingData, bookingPrice }) => {
       {/*    <!-- Modal --> */}
       <div
         ref={wrapperRef}
-        className="flex max-h-[90vh] w-11/12 max-w-2xl flex-col gap-6 overflow-hidden rounded bg-white p-6 text-slate-500 shadow-xl shadow-slate-700/10"
+        className="flex max-h-[90vh] w-11/12 max-w-2xl flex-col gap-6  rounded bg-white p-6 text-slate-500 shadow-xl shadow-slate-700/10"
         id="modal"
         role="document"
       >
         {/*        <!-- Modal header --> */}
-        <div class="p-3 space-y-2 max-w-4xl w-full mx-auto">
+        <div class="p-3 space-y-2 max-w-4xl w-full mx-auto overflow-y-auto">
           <div className="flex justify-between items-start">
             <p class="text-lg font-medium">Preview</p>
             {isLoading ? (
@@ -55,12 +55,12 @@ const BookingDetailsModal = ({ bookingData, bookingPrice }) => {
               </button>
             )}
           </div>
-          <div class="w-full overflow-x-auto">
+          <div class="w-full ">
             <table
-              class="w-overflow-x-auto w-full rounded text-left"
+              class=" w-full rounded text-left"
               cellspacing="0"
             >
-              <tbody class="space-y-1">
+              <tbody class="space-y-1 ">
                 <tr class="flex ">
                   <td
                     scope="col"
