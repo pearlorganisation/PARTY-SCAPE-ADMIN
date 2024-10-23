@@ -5,24 +5,27 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useDebouncedCallback } from 'use-debounce';
 import { Stack, Skeleton } from '@mui/material';
-import { deleteBooking, getAllBookings } from '../../features/actions/booking';
+import {
+  deleteBooking,
+  fetchNextPageBookings,
+  getAllBookings,
+} from '../../features/actions/booking';
 import ViewModalBooking from './ViewModalBooking';
 import { MdOutlineFileDownload } from 'react-icons/md';
 import { FiEdit } from 'react-icons/fi';
 import Pagination from '../../components/Pagination/Pagination';
 import { useSearchParams, useParams } from 'react-router-dom';
-
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Spinner from '../../components/Spinner';
 const ViewBookings = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const isFirstRender = useRef(true);
 
-  const [currentPage, setCurrentPage] = useState(
-    () => parseInt(searchParams.get('page')) || 1
-  );
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [filter, setFilter] = useState(() => searchParams.get('filter') || '');
-  const [search, setSearch] = useState(() => searchParams.get('search') || '');
-  const { bookingData, isLoading, isDeleted, totalPages } = useSelector(
+  const [filter, setFilter] = useState('');
+  const [search, setSearch] = useState('');
+  const { bookingData, isDeleted,isLoading,  totalPages } = useSelector(
     (state) => state.booking
   );
 
@@ -30,7 +33,8 @@ const ViewBookings = () => {
   const dispatch = useDispatch();
 
   const getBookings = useDebouncedCallback(() => {
-    dispatch(getAllBookings({ filter, search, page: currentPage }));
+    dispatch(getAllBookings({ filter, search, page: 1 }));
+    setCurrentPage(2);
   }, 500);
 
   // This useEffect will run whenever the search, filter or currentPage changes.
@@ -38,16 +42,17 @@ const ViewBookings = () => {
   useEffect(() => {
     if (!isFirstRender.current) {
       getBookings();
-      setSearchParams({ filter, search, page: currentPage });
+      setSearchParams({ filter, search });
     }
-  }, [search, filter, currentPage]);
+  }, [search, filter]);
 
   // This useEffect will run only on the first render.
   // It will call the getBookings function and update the URL parameters.
   useEffect(() => {
-    dispatch(getAllBookings({ filter, search, page: currentPage }));
-    setSearchParams({ filter, search, page: currentPage });
+    dispatch(getAllBookings({ filter, search, page: 1 }));
+    setSearchParams({ filter, search });
     isFirstRender.current = false;
+    setCurrentPage(2);
   }, []);
 
   useEffect(() => {
@@ -80,6 +85,12 @@ const ViewBookings = () => {
 
   const handleAddBooking = () => {
     navigate('/createBooking');
+  };
+
+  const fetchNextPageData = () => {
+    console.log('fetching next page data...');
+    dispatch(fetchNextPageBookings({ filter, search, page: currentPage }));
+    setCurrentPage((prev) => prev + 1);
   };
 
   return (
@@ -135,22 +146,95 @@ const ViewBookings = () => {
             Add Booking
           </a>
         </div>
-        <div className="mt-12 shadow-sm border rounded-lg overflow-x-auto">
-          <table className="w-full table-auto text-sm text-left">
-            <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-              <tr>
-                <th className="py-3 px-6">Booking ID</th>
-                <th className="py-3 px-6">Name</th>
-                <th className="py-3 px-6">Date</th>
-                <th className="py-3 px-6">Booked Slot</th>
-                <th className="py-3 px-6">Theater Name</th>
-                <th className="py-3 px-6">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600 divide-y">
-              {isLoading ? (
-                <tr>
-                  <td colSpan="6" className="text-center px-6 py-8">
+        <div className="mt-12 shadow-sm border rounded-lg">
+          <div className="w-full  text-sm text-left">
+            <div className="bg-gray-50 text-gray-600 font-medium border-b flex justify-between overflow-x-auto no-scrollbar">
+              <div className="py-3 text-center min-w-60 text-nowrap">
+                Booking ID
+              </div>
+              <div className="py-3 text-center min-w-28 text-nowrap">Name</div>
+              <div className="py-3 text-center min-w-34 text-nowrap">Date</div>
+              <div className="py-3 text-center min-w-48 text-nowrap">
+                Booked Slot
+              </div>
+              <div className="py-3 text-center min-w-28 text-nowrap">
+                Theater Name
+              </div>
+              <div className="py-3 text-center min-w-60 text-nowrap">
+                Actions
+              </div>
+            </div>
+              { bookingData && Array.isArray(bookingData) && bookingData.length || !isLoading ? (
+                <>
+                <InfiniteScroll
+                  className=" flex flex-col no-scrollbar"
+                  dataLength={bookingData?.length || 0}
+                  next={fetchNextPageData}
+                  hasMore={totalPages >= currentPage}
+                  loader={
+                    <div className="w-full flex justify-center my-5">
+                      <Spinner />
+                    </div>
+                  }
+                  height={ totalPages > 1 ? 500 : 0 }
+                >
+                  {bookingData?.map((item, idx) => (
+                    <div className="flex justify-between border-b w-full" key={idx}>
+                      <div className="text-center py-4 whitespace-nowrap min-w-60">
+                        {item?._id}
+                      </div>
+                      <div className="text-center py-4 whitespace-nowrap min-w-28">
+                        {item?.bookedBy?.name}
+                      </div>
+                      <div className="text-center py-4 whitespace-nowrap min-w-34">
+                        {item?.bookedDate}
+                      </div>
+                      <div className="text-center py-4 whitespace-nowrap min-w-48">
+                        {item?.bookedSlot}
+                      </div>
+                      <div className="text-center py-4 whitespace-nowrap min-w-28">
+                        {item?.theater?.theaterName}
+                      </div>
+
+                      <div className=" justify-center flex gap-2 whitespace-nowrap min-w-60">
+                        <button
+                          onClick={() => {
+                            handleViewModal(item);
+                          }}
+                          className="py-2 leading-none font-semibold text-blue-500 hover:text-blue-600 duration-150 hover:bg-gray-50 rounded-lg"
+                        >
+                          View
+                        </button>
+                        <button
+                          onClick={() => {
+                            // navigate(`/updateBooking/${item?._id}`, {
+                            //   state: item,
+                            // });
+                          }}
+                          className="py-2 flex gap-1 leading-none items-center font-semibold text-green-500 hover:text-green-400 duration-150 hover:bg-gray-50 rounded-lg"
+                        >
+                          Edit <FiEdit />
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleModal(item?._id);
+                          }}
+                          className="py-2 leading-none px- font-semibold text-red-500 hover:text-red-600 duration-150 hover:bg-gray-50 rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </InfiniteScroll>
+                {bookingData.length === 0 && (
+                  <p className="text-center py-4 text-gray-500">
+                    No results found. Please try a different search or filter.
+                  </p>
+                )}
+                </>
+              ) : (
+                  <div colSpan="6" className="text-center px-6 py-8">
                     <Stack spacing={4}>
                       <Skeleton variant="rounded" height={30} />
                       <Skeleton variant="rounded" height={25} />
@@ -158,67 +242,10 @@ const ViewBookings = () => {
                       <Skeleton variant="rounded" height={20} />
                       <Skeleton variant="rounded" height={20} />
                     </Stack>
-                  </td>
-                </tr>
-              ) : (
-                Array.isArray(bookingData) &&
-                bookingData?.map((item, idx) => (
-                  <tr key={idx}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?._id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.bookedBy?.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.bookedDate}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.bookedSlot}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.theater?.theaterName}
-                    </td>
-
-                    <td className=" px-6 flex gap-2 whitespace-nowrap">
-                      <button
-                        onClick={() => {
-                          handleViewModal(item);
-                        }}
-                        className="py-2 leading-none font-semibold text-blue-500 hover:text-blue-600 duration-150 hover:bg-gray-50 rounded-lg"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => {
-                          // navigate(`/updateBooking/${item?._id}`, {
-                          //   state: item,
-                          // });
-                        }}
-                        className="py-2 flex gap-1 leading-none px- font-semibold text-green-500 hover:text-green-400 duration-150 hover:bg-gray-50 rounded-lg"
-                      >
-                        Edit <FiEdit />
-                      </button>
-                      <button
-                        onClick={() => {
-                          handleModal(item?._id);
-                        }}
-                        className="py-2 leading-none px- font-semibold text-red-500 hover:text-red-600 duration-150 hover:bg-gray-50 rounded-lg"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                  </div>
               )}
-            </tbody>
-          </table>
+          </div>
         </div>
-        <Pagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-        />
       </div>
       {showDeleteModal && (
         <Delete setModal={setShowDeleteModal} handleDelete={handleDelete} />

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import {
   deleteBooking,
+  fetchNextPageBookings,
   getAllBookings,
   offlineBooking,
 } from '../actions/booking';
@@ -40,6 +41,24 @@ const bookingSlice = createSlice({
         state.successData = {};
       })
       .addCase(getAllBookings.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload;
+      })
+      .addCase(fetchNextPageBookings.pending, (state, action) => {
+        state.isLoading = true;
+        state.isDeleted = false;
+        state.errorMessage = '';
+      })
+      .addCase(fetchNextPageBookings.fulfilled, (state, action) => {
+        state.isLoading = false;
+
+        state.errorMessage = '';
+
+        state.bookingData = [...state.bookingData, ...action.payload.data];
+        state.totalPages = action.payload.totalPages;
+        state.successData = {};
+      })
+      .addCase(fetchNextPageBookings.rejected, (state, action) => {
         state.isLoading = false;
         state.errorMessage = action.payload;
       })
