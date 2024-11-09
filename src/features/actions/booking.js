@@ -26,6 +26,30 @@ export const getAllBookings = createAsyncThunk(
   }
 );
 
+//get all booking api
+export const fetchNextPageBookings = createAsyncThunk(
+  'getNextBookings',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const { data } = await instance.get(
+        `/bookings?search=${payload.search || ''}&filter=${payload.filter || ''}&page=${payload.page ?? 1}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data)
+
+      return {
+        data: data?.data ? data.data : [], 
+        totalPages: data?.totalCount ?  Math.ceil(data.totalCount / 10) : 1, 
+        status: data?.status || false, 
+      }
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 //delete booking api
 export const deleteBooking = createAsyncThunk(
   'deleteBooking',

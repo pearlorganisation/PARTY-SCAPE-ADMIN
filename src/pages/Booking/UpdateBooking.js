@@ -44,7 +44,7 @@ const UpdateBooking = () => {
       _id: 4,
       img: '/photoClipping.png',
       title: 'Photo Clippings(18 Pics)',
-      price: 399,
+      price: 449,
     },
 
     {

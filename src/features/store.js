@@ -19,6 +19,7 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
+  blacklist: ['booking'],
   transforms: [
     encryptTransform({
       secretKey: `${process.env.REACT_APP_REDUX_PERSIST_SECRET_KEY}`,
