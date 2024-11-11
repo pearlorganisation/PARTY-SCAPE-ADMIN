@@ -181,7 +181,7 @@ const ViewBookings = () => {
                   {bookingData?.map((item, idx) => (
                     <div className="flex justify-between border-b w-full" key={idx}>
                       <div className="text-center py-4 whitespace-nowrap min-w-60">
-                        {item?._id}
+                        {item?.bookingId}
                       </div>
                       <div className="text-center py-4 whitespace-nowrap min-w-28">
                         {item?.bookedBy?.name}
