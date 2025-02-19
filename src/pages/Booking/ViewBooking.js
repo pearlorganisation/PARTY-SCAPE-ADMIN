@@ -99,7 +99,7 @@ const ViewBookings = () => {
           <div>
             <a
               href="
-            https://api.partyscape.in/api/v1/bookings/sheet"
+            https://api.partyscape.co.in/api/v1/bookings/sheet"
               target="_blank"
               className="flex justify-center items-center gap-1 px-4 py-2 bg-indigo-500 text-white font-medium rounded-md"
             >
